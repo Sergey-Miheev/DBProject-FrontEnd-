@@ -21,7 +21,7 @@ class Account {
   String name;
   String email;
   String password;
-  String dateOfBirthday;
+  DateTime dateOfBirthday;
   int? idImage;
   List<dynamic> bookings;
 
@@ -30,7 +30,7 @@ class Account {
     name: json["name"],
     email: json["email"],
     password: json["password"],
-    dateOfBirthday: json["dateOfBirthday"],
+    dateOfBirthday: DateTime.parse(json["dateOfBirthday"].toString()) ,
     idImage: json["idImage"],
     bookings: List<dynamic>.from(json["bookings"].map((x) => x)),
   );

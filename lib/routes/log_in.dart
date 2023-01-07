@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../callApi/checkRegister.dart';
+import '../callApi/checkingExistenceOfAccount.dart';
 
 class Authorization extends StatelessWidget {
   Authorization({Key? key}) : super(key: key);
