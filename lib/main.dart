@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:place_booking/routes/cinema_list.dart';
 import 'package:place_booking/routes/welcome.dart';
-//import 'routes/log_in.dart';
+import 'routes/select_city.dart';
 import 'routes/sign_up.dart';
 import 'routes/log_in.dart';
 
@@ -23,11 +24,13 @@ void main() {
       theme: ThemeData(
           colorSchemeSeed: const Color(0xffff8af9), useMaterial3: true),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/cities',
       routes: {
         '/': (context) => const Welcome(),
         '/sign_in': (context) => Authorization(),
         '/register': (context) => SignUp(),
+        '/cities': (context) => SelectCity(),
+        '/cinemas': (context) => CinemaList(cityName: 'Yoshkar-Ola',),
       },
     ),
   );

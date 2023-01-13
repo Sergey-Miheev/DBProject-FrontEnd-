@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/createAccount.dart';
 import '../callApi/checkRegisteredEmail.dart';
-import 'log_in.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);

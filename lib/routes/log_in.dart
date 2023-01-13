@@ -45,7 +45,7 @@ class Authorization extends StatelessWidget {
                   child: const Text("LOG IN"),
                   onPressed: () async {
                     if (await checkingExistenceOfAccount(_email, _pw) != null) {
-                      Navigator.pushNamed(context, "/");
+                      Navigator.pushNamed(context, "/cities");
                     }
                     //if (await checkRegisterOfEmail(_email, _pw) != null) {
                     else {
