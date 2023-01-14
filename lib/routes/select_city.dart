@@ -44,7 +44,7 @@ class _SelectCityState extends State<SelectCity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(""),),
+      appBar: AppBar(title: const Text("-Step 1-"),centerTitle: true,),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -75,7 +75,7 @@ class _SelectCityState extends State<SelectCity> {
                     controller: _cnt,
                     clearOption: true,
                     keyboardType: TextInputType.number,
-                    autovalidateMode: AutovalidateMode.always,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     clearIconProperty: IconProperty(color: Colors.green),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
