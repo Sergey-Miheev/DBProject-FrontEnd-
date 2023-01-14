@@ -1,5 +1,7 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:place_booking/routes/cinema_list.dart';
+import '../callApi/getCities.dart';
 
 class SelectCity extends StatefulWidget {
   const SelectCity({Key? key}) : super(key: key);
@@ -12,11 +14,24 @@ class _SelectCityState extends State<SelectCity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late SingleValueDropDownController _cnt;
   final formKey = GlobalKey<FormState>();
+  final List<DropDownValueModel> _citiesNamesList = [];
+  String _selectedCity = "";
+
+  void wrapCities() async {
+    List<String>? response = await getCities();
+    if (response != null) {
+      for (String cityName in response) {
+        _citiesNamesList
+            .add(DropDownValueModel(name: cityName, value: cityName));
+      }
+    }
+    setState(() {});
+  }
 
   @override
   void initState() {
     _cnt = SingleValueDropDownController();
-
+    wrapCities();
     super.initState();
   }
 
@@ -29,6 +44,7 @@ class _SelectCityState extends State<SelectCity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text(""),),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -69,17 +85,10 @@ class _SelectCityState extends State<SelectCity> {
                       }
                     },
                     dropDownItemCount: 6,
-                    dropDownList: const [
-                      DropDownValueModel(name: 'name1', value: "value1"),
-                      DropDownValueModel(name: 'name2', value: "value2"),
-                      DropDownValueModel(name: 'name3', value: "value3"),
-                      DropDownValueModel(name: 'name4', value: "value4"),
-                      DropDownValueModel(name: 'name5', value: "value5"),
-                      DropDownValueModel(name: 'name6', value: "value6"),
-                      DropDownValueModel(name: 'name7', value: "value7"),
-                      DropDownValueModel(name: 'name8', value: "value8"),
-                    ],
-                    onChanged: (val) => {if (val != "") {print(val.name)}},
+                    dropDownList: _citiesNamesList,
+                    onChanged: (value) => {
+                      if (value != "") {_selectedCity = value.name}
+                    },
                   ),
                 ),
               ],
@@ -89,6 +98,12 @@ class _SelectCityState extends State<SelectCity> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          if (_selectedCity != "") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CinemaList(cityName: _selectedCity)));
+          }
           formKey.currentState!.validate();
         },
         label: const Text("Submit"),

@@ -27,7 +27,7 @@ class Welcome extends StatelessWidget {
                       style: _sizeTextWhite,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/sign_in');
+                      Navigator.pushNamed(context, '/log_in');
                     },
                   ),
                 ),

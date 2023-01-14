@@ -1,14 +1,17 @@
 import 'dart:core';
-import '../models/Account.dart';
 import 'package:dio/dio.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/account';
+String baseUrl = 'https://10.0.2.2:7099/cities';
 
-Future<Account?> checkRegisteredEmail(String email) async {
+Future<List<String>?> getCities() async {
   try {
-    Response response = await Dio().get('$baseUrl/$email');
+    List<String> citiesNames = [];
+    Response response = await Dio().get(baseUrl);
+    for (var city in response.data) {
+      citiesNames.add(city);
+    }
     print(response.data.toString());
-    return Account.fromJson(response.data);
+    return citiesNames;
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

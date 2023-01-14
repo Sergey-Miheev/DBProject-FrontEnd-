@@ -24,13 +24,12 @@ void main() {
       theme: ThemeData(
           colorSchemeSeed: const Color(0xffff8af9), useMaterial3: true),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/cities',
+      initialRoute: '/',
       routes: {
         '/': (context) => const Welcome(),
-        '/sign_in': (context) => Authorization(),
+        '/log_in': (context) => Authorization(),
         '/register': (context) => SignUp(),
-        '/cities': (context) => SelectCity(),
-        '/cinemas': (context) => CinemaList(cityName: 'Yoshkar-Ola',),
+        '/cities': (context) => SelectCity()
       },
     ),
   );

@@ -52,7 +52,7 @@ class SignUp extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushNamed(context, '/log_in');
                         },
                         child: const Text("CANCEL")),
                     ElevatedButton(
