@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import '../callApi/checkingExistenceOfAccount.dart';
+import '../models/Account.dart';
+
 
 class Authorization extends StatelessWidget {
   Authorization({Key? key}) : super(key: key);
 
   String _email = "";
   String _pw = "";
+  Account? account;
+  int role = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +49,27 @@ class Authorization extends StatelessWidget {
                 ElevatedButton(
                   child: const Text("LOG IN"),
                   onPressed: () async {
-                    if (await checkingExistenceOfAccount(_email, _pw) != null) {
-                      Navigator.pushNamed(context, "/cities");
+                    account = await checkingExistenceOfAccount(_email, _pw);
+                    if ((account != null)) {
+                      role = account!.role;
+                      Navigator.pushNamed(context, "/cities", arguments: role);
                     }
                     //if (await checkRegisterOfEmail(_email, _pw) != null) {
                     else {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
-                                title: Text("Слышь тебе сюда нельзя"),
-                                content:
-                                    Text("Заходи не бойся, уходи не плачь"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'sign_in'),
-                                    child: const Text('Понял'),
-                                  )
-                                ],
-                              ));
+                            title: Text("Слышь тебе сюда нельзя"),
+                            content:
+                            Text("Заходи не бойся, уходи не плачь"),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'sign_in'),
+                                child: const Text('Понял'),
+                              )
+                            ],
+                          ));
                     }
                   },
                 ),

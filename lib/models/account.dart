@@ -13,6 +13,7 @@ class Account {
     required this.email,
     required this.password,
     required this.dateOfBirthday,
+    required this.role,
     this.idImage,
     required this.bookings,
   });
@@ -22,6 +23,7 @@ class Account {
   String email;
   String password;
   DateTime dateOfBirthday;
+  int role;
   int? idImage;
   List<dynamic> bookings;
 
@@ -31,6 +33,7 @@ class Account {
     email: json["email"],
     password: json["password"],
     dateOfBirthday: DateTime.parse(json["dateOfBirthday"].toString()) ,
+    role: json["role"],
     idImage: json["idImage"],
     bookings: List<dynamic>.from(json["bookings"].map((x) => x)),
   );
@@ -41,6 +44,7 @@ class Account {
     "email": email,
     "password": password,
     "dateOfBirthday": dateOfBirthday,
+    "role": role,
     "idImage": idImage,
     "bookings": List<dynamic>.from(bookings.map((x) => x)),
   };

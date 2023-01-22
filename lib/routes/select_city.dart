@@ -15,6 +15,7 @@ class _SelectCityState extends State<SelectCity> {
   late SingleValueDropDownController _cnt;
   final formKey = GlobalKey<FormState>();
   final List<DropDownValueModel> _citiesNamesList = [];
+  int _role = 0;
   String _selectedCity = "";
 
   void wrapCities() async {
@@ -43,6 +44,7 @@ class _SelectCityState extends State<SelectCity> {
 
   @override
   Widget build(BuildContext context) {
+    _role = ModalRoute.of(context)?.settings.arguments as int;
     return Scaffold(
       appBar: AppBar(title: const Text("-Step 1-"),centerTitle: true,),
       body: SingleChildScrollView(
@@ -102,7 +104,7 @@ class _SelectCityState extends State<SelectCity> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CinemaList(cityName: _selectedCity)));
+                    builder: (context) => CinemaList(cityName: _selectedCity, accountRole: _role)));
           }
           formKey.currentState!.validate();
         },
