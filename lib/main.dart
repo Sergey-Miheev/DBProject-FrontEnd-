@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:place_booking/routes/actions_with_cinema.dart';
 import 'package:place_booking/routes/cinema_list.dart';
 import 'package:place_booking/routes/welcome.dart';
 import 'routes/select_city.dart';
@@ -29,8 +30,11 @@ void main() {
         '/': (context) => const Welcome(),
         '/log_in': (context) => Authorization(),
         '/register': (context) => SignUp(),
-        '/cities': (context) => SelectCity()
+        '/cities': (context) => SelectCity(),
+        '/cinema_actions': (context) => ActionWithCinema(),
       },
     ),
   );
 }
+
+//        '/list_cinemas': (context) => CinemaList(),

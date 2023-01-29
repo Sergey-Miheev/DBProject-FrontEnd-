@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/get_cinemas_of_city.dart';
-import 'package:place_booking/models/Account.dart';
 import '../models/cinema.dart';
 
 class CinemaCard extends StatelessWidget {
@@ -11,6 +10,8 @@ class CinemaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () =>
+          Navigator.pushNamed(context, "/cinema_actions", arguments: cinema),
       title: Text(cinema.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
       subtitle: Text("Address: ${cinema.address}",
@@ -50,26 +51,35 @@ class _CinemaListState extends State<CinemaList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.accountRole == 1) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("-Admin page-"),
-          centerTitle: true,
-        ),
-        body: ListView.separated(
-            separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.black, height: 10, thickness: 2,),
-            itemCount: _cinemas.length,
-            padding: const EdgeInsets.all(20),
-            itemBuilder: (BuildContext context, int index) {
-              return CinemaCard(cinema: _cinemas[index]);
-            }),
-        floatingActionButton: const Icon(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("-Admin page-"),
+        centerTitle: true,
+      ),
+      body: ListView.separated(
+          separatorBuilder: (BuildContext context, int index) => const Divider(
+                color: Colors.black,
+                height: 10,
+                thickness: 2,
+              ),
+          itemCount: _cinemas.length,
+          padding: const EdgeInsets.all(20),
+          itemBuilder: (BuildContext context, int index) {
+            return CinemaCard(cinema: _cinemas[index]);
+          }),
+      floatingActionButton: OutlinedButton(
+        onPressed: () => Navigator.pushNamed(context, "/cinema_actions", arguments: Cinema(idCinema: 0, name: "",cityName: "", address: "", halls: [],)),
+        child: const Icon(
           Icons.add,
           size: Checkbox.width * 3,
           color: Colors.green,
         ),
-      );
-    } else {
+      ),
+    );
+  }
+}
+/*
+else {
       return Scaffold(
         appBar: AppBar(
           title: const Text("-Step 2-"),
@@ -100,6 +110,4 @@ class _CinemaListState extends State<CinemaList> {
               ]);
             }),
       );
-    }
-  }
-}
+ */

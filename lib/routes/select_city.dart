@@ -104,7 +104,8 @@ class _SelectCityState extends State<SelectCity> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CinemaList(cityName: _selectedCity, accountRole: _role)));
+                  builder: (context) => CinemaList(cityName: _selectedCity, accountRole: _role,),
+                ),);
           }
           formKey.currentState!.validate();
         },
