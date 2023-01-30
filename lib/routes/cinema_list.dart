@@ -21,11 +21,11 @@ class CinemaCard extends StatelessWidget {
 }
 
 class CinemaList extends StatefulWidget {
-  CinemaList({required this.cityName, required this.accountRole, Key? key})
+  CinemaList({  Key? key})
       : super(key: key);
+  //required this.accountRole,required this.cityName,
 
-  final String cityName;
-  final int accountRole;
+  //final int accountRole;
 
   @override
   State<CinemaList> createState() => _CinemaListState();
@@ -34,8 +34,9 @@ class CinemaList extends StatefulWidget {
 class _CinemaListState extends State<CinemaList> {
   List<Cinema> _cinemas = [];
 
+  String cityName ="";
   void getCinemas() async {
-    List<Cinema>? response = await getCinemasOfCity(widget.cityName);
+    List<Cinema>? response = await getCinemasOfCity(cityName);
     if (response != null) {
       setState(() {
         _cinemas = response;
@@ -45,8 +46,14 @@ class _CinemaListState extends State<CinemaList> {
 
   @override
   void initState() {
-    getCinemas();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    cityName = ModalRoute.of(context)?.settings.arguments as String;
+    getCinemas();
+    super.didChangeDependencies();
   }
 
   @override

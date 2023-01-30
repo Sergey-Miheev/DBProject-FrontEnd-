@@ -4,6 +4,7 @@ import 'package:place_booking/callApi/delete_cinema.dart';
 import '../callApi/createCinema.dart';
 import '../callApi/editCinema.dart';
 import '../models/cinema.dart';
+import 'cinema_list.dart';
 
 class ActionWithCinema extends StatefulWidget {
   const ActionWithCinema({Key? key}) : super(key: key);
@@ -18,9 +19,7 @@ class _ActionWithCinemaState extends State<ActionWithCinema> {
   Cinema? _cinema;
 
   @override
-  void initState() {
-
-  }
+  void initState() {}
 
   @override
   void didChangeDependencies() {
@@ -102,6 +101,7 @@ class _ActionWithCinemaState extends State<ActionWithCinema> {
                         await editCinema(_cinema);
                         //Navigator.pop;
                       }
+                      Navigator.pushReplacementNamed(context, '/list_cinemas', arguments: _cinema!.cityName);
                     },
                     child: const Text("SAVE"),
                   ),

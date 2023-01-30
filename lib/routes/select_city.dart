@@ -101,11 +101,9 @@ class _SelectCityState extends State<SelectCity> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (_selectedCity != "") {
-            Navigator.push(
+            Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => CinemaList(cityName: _selectedCity, accountRole: _role,),
-                ),);
+                '/list_cinemas', arguments: _selectedCity);
           }
           formKey.currentState!.validate();
         },

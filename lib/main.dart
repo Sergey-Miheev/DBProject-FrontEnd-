@@ -31,6 +31,7 @@ void main() {
         '/log_in': (context) => Authorization(),
         '/register': (context) => SignUp(),
         '/cities': (context) => SelectCity(),
+        '/list_cinemas': (context) => CinemaList(),
         '/cinema_actions': (context) => ActionWithCinema(),
       },
     ),
