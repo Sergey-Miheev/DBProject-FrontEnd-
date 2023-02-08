@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/callApi/createAccount.dart';
+import 'package:place_booking/callApi/create_account.dart';
 import '../callApi/checkRegisteredEmail.dart';
 
 class SignUp extends StatelessWidget {

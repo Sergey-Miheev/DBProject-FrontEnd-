@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/delete_cinema.dart';
 
-import '../callApi/createCinema.dart';
+import '../callApi/create_cinema.dart';
 import '../callApi/edit_cinema_func.dart';
 import '../models/cinema.dart';
 import 'cinemas_list.dart';

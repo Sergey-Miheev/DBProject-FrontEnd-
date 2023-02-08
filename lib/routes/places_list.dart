@@ -1,50 +1,46 @@
 import 'package:flutter/material.dart';
-import '../callApi/get_halls.dart';
+import '../callApi/get_places_func.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
 import '../models/hall.dart';
 import '../models/place.dart';
 
-class HallCard extends StatelessWidget {
-  const HallCard({required this.hall, required this.routesData, Key? key})
+class PlaceCard extends StatelessWidget {
+  const PlaceCard({required this.place, required this.routesData, Key? key})
       : super(key: key);
 
   final RoutesData routesData;
-  final Hall hall;
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        routesData.hall = Hall(
-            idHall: hall.idHall,
-            idCinema: hall.idCinema,
-            number: hall.number,
-            type: hall.type,
-            capacity: hall.capacity,
-            places: hall.places,
-            sessions: hall.sessions);
-        Navigator.pushNamed(context, "/edit_hall", arguments: routesData);
+        routesData.place = Place(
+            idPlace: place.idPlace,
+            idHall: place.idHall,
+            row: place.row,
+            seatNumber: place.seatNumber,
+            bookings: place.bookings);
+        Navigator.pushNamed(context, "/edit_place", arguments: routesData);
       },
-      title: Text("Number: ${hall.number.toString()}",
+      title: Text("Row: ${place.row.toString()}",
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Capacity: ${hall.capacity}",
-          style: const TextStyle(fontSize: 16, color: Colors.orange)),
-      trailing: Text("Type: ${hall.type.toString()}",
+      subtitle: Text("Seat: ${place.seatNumber}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
 }
 
-class HallsList extends StatefulWidget {
-  HallsList({Key? key}) : super(key: key);
+class PlacesList extends StatefulWidget {
+  PlacesList({Key? key}) : super(key: key);
 
   @override
-  State<HallsList> createState() => _HallsListState();
+  State<PlacesList> createState() => _PlacesListState();
 }
 
-class _HallsListState extends State<HallsList> {
-  List<Hall> _halls = [];
+class _PlacesListState extends State<PlacesList> {
+  List<Place> _places = [];
 
   RoutesData routesData = RoutesData(
       "",
@@ -59,11 +55,11 @@ class _HallsListState extends State<HallsList> {
           sessions: []),
       Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
-  void getHalls() async {
-    List<Hall>? response = await getHallsOfCinema(routesData.cinema.idCinema);
+  void getPlaces() async {
+    List<Place>? response = await getPlacesOfHall(routesData.hall.idHall);
     if (response != null) {
       setState(() {
-        _halls = response;
+        _places = response;
       });
     }
   }
@@ -76,7 +72,7 @@ class _HallsListState extends State<HallsList> {
   @override
   void didChangeDependencies() {
     routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
-    getHalls();
+    getPlaces();
     super.didChangeDependencies();
   }
 
@@ -85,7 +81,7 @@ class _HallsListState extends State<HallsList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Halls list-"),
+          title: const Text("-Places list-"),
           centerTitle: true,
         ),
         body: ListView.separated(
@@ -95,14 +91,14 @@ class _HallsListState extends State<HallsList> {
                   height: 10,
                   thickness: 2,
                 ),
-            itemCount: _halls.length,
+            itemCount: _places.length,
             padding: const EdgeInsets.all(20),
             itemBuilder: (BuildContext context, int index) {
-              return HallCard(hall: _halls[index], routesData: routesData);
+              return PlaceCard(place: _places[index], routesData: routesData);
             }),
         floatingActionButton: OutlinedButton(
           onPressed: () =>
-              Navigator.pushNamed(context, "/add_hall", arguments: routesData),
+              Navigator.pushNamed(context, "/add_place", arguments: routesData),
           child: const Icon(
             Icons.add,
             size: Checkbox.width * 3,
@@ -111,7 +107,7 @@ class _HallsListState extends State<HallsList> {
         ),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/edit_cinema',
+        Navigator.pushReplacementNamed(context, '/edit_hall',
             arguments: routesData);
         return Future.value(true);
       },

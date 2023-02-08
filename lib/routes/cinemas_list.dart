@@ -3,9 +3,11 @@ import 'package:place_booking/callApi/get_cinemas_of_city.dart';
 import 'package:place_booking/models/data_for_routes.dart';
 import '../models/cinema.dart';
 import '../models/hall.dart';
+import '../models/place.dart';
 
 class CinemaCard extends StatelessWidget {
-  CinemaCard({required this.cinema, required this.localRoutesData, Key? key}) : super(key: key);
+  CinemaCard({required this.cinema, required this.localRoutesData, Key? key})
+      : super(key: key);
 
   Cinema cinema;
   RoutesData localRoutesData;
@@ -14,8 +16,14 @@ class CinemaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        localRoutesData.cinema = Cinema(idCinema: cinema.idCinema, name: cinema.name, cityName: cinema.cityName, address: cinema.address, halls: cinema.halls);
-        Navigator.pushNamed(context, "/edit_cinema", arguments: localRoutesData);
+        localRoutesData.cinema = Cinema(
+            idCinema: cinema.idCinema,
+            name: cinema.name,
+            cityName: cinema.cityName,
+            address: cinema.address,
+            halls: cinema.halls);
+        Navigator.pushNamed(context, "/edit_cinema",
+            arguments: localRoutesData);
       },
       title: Text(cinema.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
@@ -35,7 +43,18 @@ class CinemaList extends StatefulWidget {
 class _CinemaListState extends State<CinemaList> {
   List<Cinema> _cinemas = [];
 
-  RoutesData routesData = RoutesData("", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []), Hall(idHall: 0, idCinema: 0, number: 0, type: 0, capacity: 0, places: [], sessions: []));
+  RoutesData routesData = RoutesData(
+      "",
+      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
+      Hall(
+          idHall: 0,
+          idCinema: 0,
+          number: 0,
+          type: 0,
+          capacity: 0,
+          places: [],
+          sessions: []),
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
   void getCinemas() async {
     List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
@@ -76,10 +95,12 @@ class _CinemaListState extends State<CinemaList> {
             itemCount: _cinemas.length,
             padding: const EdgeInsets.all(20),
             itemBuilder: (BuildContext context, int index) {
-              return CinemaCard(localRoutesData: routesData, cinema: _cinemas[index]);
+              return CinemaCard(
+                  localRoutesData: routesData, cinema: _cinemas[index]);
             }),
         floatingActionButton: OutlinedButton(
-          onPressed: () => Navigator.pushNamed(context, "/add_cinema", arguments: routesData),
+          onPressed: () => Navigator.pushNamed(context, "/add_cinema",
+              arguments: routesData),
           child: const Icon(
             Icons.add,
             size: Checkbox.width * 3,
@@ -88,7 +109,8 @@ class _CinemaListState extends State<CinemaList> {
         ),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/cities', arguments: routesData);
+        Navigator.pushReplacementNamed(context, '/cities',
+            arguments: routesData);
         return Future.value(true);
       },
     );

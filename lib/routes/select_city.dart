@@ -1,5 +1,6 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:place_booking/models/place.dart';
 import '../callApi/getCities.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
@@ -18,7 +19,18 @@ class _SelectCityState extends State<SelectCity> {
   final formKey = GlobalKey<FormState>();
   final List<DropDownValueModel> _citiesNamesList = [];
 
-  RoutesData routesData = RoutesData("", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []), Hall(idHall: 0, idCinema: 0, number: 0, type: 0, capacity: 0, places: [], sessions: []));
+  RoutesData routesData = RoutesData(
+      "",
+      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
+      Hall(
+          idHall: 0,
+          idCinema: 0,
+          number: 0,
+          type: 0,
+          capacity: 0,
+          places: [],
+          sessions: []),
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
   void wrapCities() async {
     List<String>? response = await getCities();
@@ -46,72 +58,78 @@ class _SelectCityState extends State<SelectCity> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("-Step 1-"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 70,
-                ),
-                const Text(
-                  "Please, select a city, where you want watch movie",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("-Step 1-"),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 70,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Form(
-                  key: formKey,
-                  child: DropDownTextField(
-                    // initialValue: "name4",
-                    readOnly: false,
-                    controller: _cnt,
-                    clearOption: true,
-                    keyboardType: TextInputType.number,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    clearIconProperty: IconProperty(color: Colors.green),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Required field";
-                      } else {
-                        return null;
-                      }
-                    },
-                    dropDownItemCount: 6,
-                    dropDownList: _citiesNamesList,
-                    onChanged: (value) => {
-                      if (value != "") {routesData.cityName = value.name}
-                    },
+                  const Text(
+                    "Please, select a city, where you want watch movie",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: DropDownTextField(
+                      // initialValue: "name4",
+                      readOnly: false,
+                      controller: _cnt,
+                      clearOption: true,
+                      keyboardType: TextInputType.number,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      clearIconProperty: IconProperty(color: Colors.green),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Required field";
+                        } else {
+                          return null;
+                        }
+                      },
+                      dropDownItemCount: 6,
+                      dropDownList: _citiesNamesList,
+                      onChanged: (value) => {
+                        if (value != "") {routesData.cityName = value.name}
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            if (routesData.cityName != "") {
+              Navigator.pushNamed(context, '/list_cinemas',
+                  arguments: routesData);
+            }
+            formKey.currentState!.validate();
+          },
+          label: const Text("Submit"),
+        ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          if (routesData.cityName != "") {
-            Navigator.pushNamed(context, '/list_cinemas',
-                arguments: routesData);
-          }
-          formKey.currentState!.validate();
-        },
-        label: const Text("Submit"),
-      ),
+      onWillPop: () async {
+        Navigator.pushReplacementNamed(context, '/log_in');
+        return Future.value(true);
+      },
     );
   }
 }

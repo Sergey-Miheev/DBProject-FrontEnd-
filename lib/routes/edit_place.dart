@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../callApi/delete_hall_func.dart';
-import '../callApi/edit_hall_func.dart';
+import '../callApi/delete_place_func.dart';
+import '../callApi/edit_place_func.dart';
 import '../models/data_for_routes.dart';
 
-class EditHall extends StatelessWidget {
-  EditHall({Key? key}) : super(key: key);
+class EditPlace extends StatelessWidget {
+  EditPlace({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -15,7 +15,7 @@ class EditHall extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit hall data"),
+          title: const Text("Edit place data"),
         ),
         body: Form(
             key: _formKey,
@@ -26,36 +26,24 @@ class EditHall extends StatelessWidget {
                 // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                 TextFormField(
                   onChanged: (String value) =>
-                      {routesData.hall.number = int.parse(value)},
-                  decoration: const InputDecoration(labelText: "Hall number"),
-                  initialValue: routesData.hall.number.toString(),
+                      {routesData.place.row = int.parse(value)},
+                  decoration: const InputDecoration(labelText: "Row number"),
+                  initialValue: routesData.place.row.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter hall number';
+                      return 'Enter row number';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   onChanged: (String value) =>
-                      {routesData.hall.type = int.parse(value)},
-                  decoration: const InputDecoration(labelText: "Hall type"),
-                  initialValue: routesData.hall.type.toString(),
+                      {routesData.place.seatNumber = int.parse(value)},
+                  decoration: const InputDecoration(labelText: "Seat number"),
+                  initialValue: routesData.place.seatNumber.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter hall type';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.hall.capacity = int.parse(value)},
-                  decoration: const InputDecoration(labelText: "Hall capacity"),
-                  initialValue: routesData.hall.capacity.toString(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Enter hall capacity';
+                      return 'Enter seat number';
                     }
                     return null;
                   },
@@ -65,8 +53,8 @@ class EditHall extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        deleteHall(routesData.hall.idHall);
-                        Navigator.pushReplacementNamed(context, '/list_halls',
+                        deletePlace(routesData.place.idPlace);
+                        Navigator.pushReplacementNamed(context, '/list_places',
                             arguments: routesData);
                       },
                       child: const Text("DELETE"),
@@ -74,16 +62,8 @@ class EditHall extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // спросить пользователя сохранять ли изменения, если да вызываем функцию:
-                        editHall(routesData.hall);
+                        editPlace(routesData.place);
                         Navigator.pushReplacementNamed(context, '/list_places',
-                            arguments: routesData);
-                      },
-                      child: const Text("EDIT PLACES->"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        editHall(routesData.hall);
-                        Navigator.pushReplacementNamed(context, '/list_halls',
                             arguments: routesData);
                       },
                       child: const Text("SAVE"),
@@ -94,7 +74,7 @@ class EditHall extends StatelessWidget {
             )),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/list_halls',
+        Navigator.pushReplacementNamed(context, '/list_places',
             arguments: routesData);
         return Future.value(true);
       },

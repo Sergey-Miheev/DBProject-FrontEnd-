@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/models/data_for_routes.dart';
-import '../callApi/createCinema.dart';
+import '../callApi/create_cinema.dart';
 import '../models/cinema.dart';
 
 class AddCinema extends StatelessWidget {
