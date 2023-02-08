@@ -79,7 +79,7 @@ class Authorization extends StatelessWidget {
         ),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
         return Future.value(true);
       },
     );
