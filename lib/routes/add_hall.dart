@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/data_for_routes.dart';
-import '../callApi/createCinema.dart';
-import '../models/cinema.dart';
+import '../callApi/create_hall.dart';
+import '../models/data_for_routes.dart';
+import '../models/hall.dart';
 
-class AddCinema extends StatelessWidget {
-  AddCinema({Key? key}) : super(key: key);
+class AddHall extends StatelessWidget {
+  AddHall({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
-  Cinema cinema =
-      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []);
+  Hall? hall = Hall(
+      idHall: 0,
+      idCinema: 0,
+      number: 0,
+      capacity: 0,
+      type: 0,
+      places: [],
+      sessions: []);
   bool duplicate = false;
 
   @override
   Widget build(BuildContext context) {
-    RoutesData routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
+    RoutesData routesData =
+        ModalRoute.of(context)?.settings.arguments as RoutesData;
+    hall!.idCinema = routesData.hall.idCinema;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Create cinema"),
+          title: const Text("Create hall"),
           centerTitle: true,
         ),
         body: Form(
@@ -26,47 +34,50 @@ class AddCinema extends StatelessWidget {
                 children: [
                   // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                   TextFormField(
-                    onChanged: (String value) => {cinema.name = value},
+                    onChanged: (String value) =>
+                        {hall!.number = int.parse(value)},
+                    decoration: const InputDecoration(labelText: "Hall number"),
+                    initialValue: hall!.number.toString(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter hall number';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    onChanged: (String value) =>
+                        {hall!.type = int.parse(value)},
+                    decoration: const InputDecoration(labelText: "Hall type"),
+                    initialValue: hall!.type.toString(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter hall type';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    onChanged: (String value) =>
+                        {hall!.capacity = int.parse(value)},
                     decoration:
-                        const InputDecoration(labelText: "Cinema name"),
-                    initialValue: cinema.name,
+                        const InputDecoration(labelText: "Hall capacity"),
+                    initialValue: hall!.capacity.toString(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter cinema name';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    onChanged: (String value) => {cinema.cityName = value},
-                    decoration: const InputDecoration(labelText: "City name"),
-                    initialValue: cinema.cityName,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter city name';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    onChanged: (String value) => {cinema.address = value},
-                    decoration: const InputDecoration(labelText: "Address"),
-                    initialValue: cinema.address,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter address of cinema';
+                        return 'Enter hall capacity';
                       }
                       return null;
                     },
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      routesData.cinema = (await createCinema(
-                          cinema.name, cinema.cityName, cinema.address))!;
+                      routesData.hall = (await createHall(hall!.idCinema,
+                          hall!.number, hall!.type, hall!.capacity))!;
                       Navigator.pushReplacementNamed(context, '/list_halls',
                           arguments: routesData);
                     },
-                    child: const Text("ADD HALLS->"),
+                    child: const Text("ADD PLACES->"),
                   ),
                 ])));
   }

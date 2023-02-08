@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/get_cinemas_of_city.dart';
+import 'package:place_booking/models/data_for_routes.dart';
 import '../models/cinema.dart';
+import '../models/hall.dart';
 
 class CinemaCard extends StatelessWidget {
-  const CinemaCard({required this.cinema, Key? key}) : super(key: key);
+  CinemaCard({required this.cinema, required this.localRoutesData, Key? key}) : super(key: key);
 
-  final Cinema cinema;
+  Cinema cinema;
+  RoutesData localRoutesData;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () =>
-          Navigator.pushNamed(context, "/edit_cinema", arguments: cinema),
+      onTap: () {
+        localRoutesData.cinema = Cinema(idCinema: cinema.idCinema, name: cinema.name, cityName: cinema.cityName, address: cinema.address, halls: cinema.halls);
+        Navigator.pushNamed(context, "/edit_cinema", arguments: localRoutesData);
+      },
       title: Text(cinema.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
       subtitle: Text("Address: ${cinema.address}",
@@ -30,10 +35,10 @@ class CinemaList extends StatefulWidget {
 class _CinemaListState extends State<CinemaList> {
   List<Cinema> _cinemas = [];
 
-  String cityName = "";
+  RoutesData routesData = RoutesData("", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []), Hall(idHall: 0, idCinema: 0, number: 0, type: 0, capacity: 0, places: [], sessions: []));
 
   void getCinemas() async {
-    List<Cinema>? response = await getCinemasOfCity(cityName);
+    List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
     if (response != null) {
       setState(() {
         _cinemas = response;
@@ -48,37 +53,44 @@ class _CinemaListState extends State<CinemaList> {
 
   @override
   void didChangeDependencies() {
-    cityName = ModalRoute.of(context)?.settings.arguments as String;
+    routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
     getCinemas();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("-Cinema admin page-"),
-        centerTitle: true,
-      ),
-      body: ListView.separated(
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                color: Colors.black,
-                height: 10,
-                thickness: 2,
-              ),
-          itemCount: _cinemas.length,
-          padding: const EdgeInsets.all(20),
-          itemBuilder: (BuildContext context, int index) {
-            return CinemaCard(cinema: _cinemas[index]);
-          }),
-      floatingActionButton: OutlinedButton(
-        onPressed: () => Navigator.pushNamed(context, "/add_cinema"),
-        child: const Icon(
-          Icons.add,
-          size: Checkbox.width * 3,
-          color: Colors.green,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("-Edit cinemas page-"),
+          centerTitle: true,
+        ),
+        body: ListView.separated(
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+                  color: Colors.black,
+                  height: 10,
+                  thickness: 2,
+                ),
+            itemCount: _cinemas.length,
+            padding: const EdgeInsets.all(20),
+            itemBuilder: (BuildContext context, int index) {
+              return CinemaCard(localRoutesData: routesData, cinema: _cinemas[index]);
+            }),
+        floatingActionButton: OutlinedButton(
+          onPressed: () => Navigator.pushNamed(context, "/add_cinema", arguments: routesData),
+          child: const Icon(
+            Icons.add,
+            size: Checkbox.width * 3,
+            color: Colors.green,
+          ),
         ),
       ),
+      onWillPop: () async {
+        Navigator.pushReplacementNamed(context, '/cities', arguments: routesData);
+        return Future.value(true);
+      },
     );
   }
 }

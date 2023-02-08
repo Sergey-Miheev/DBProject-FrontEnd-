@@ -1,7 +1,9 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:place_booking/routes/cinema_list.dart';
 import '../callApi/getCities.dart';
+import '../models/cinema.dart';
+import '../models/data_for_routes.dart';
+import '../models/hall.dart';
 
 class SelectCity extends StatefulWidget {
   const SelectCity({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class _SelectCityState extends State<SelectCity> {
   late SingleValueDropDownController _cnt;
   final formKey = GlobalKey<FormState>();
   final List<DropDownValueModel> _citiesNamesList = [];
-  int _role = 0;
-  String _selectedCity = "";
+
+  RoutesData routesData = RoutesData("", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []), Hall(idHall: 0, idCinema: 0, number: 0, type: 0, capacity: 0, places: [], sessions: []));
 
   void wrapCities() async {
     List<String>? response = await getCities();
@@ -44,9 +46,11 @@ class _SelectCityState extends State<SelectCity> {
 
   @override
   Widget build(BuildContext context) {
-    _role = ModalRoute.of(context)?.settings.arguments as int;
     return Scaffold(
-      appBar: AppBar(title: const Text("-Step 1-"),centerTitle: true,),
+      appBar: AppBar(
+        title: const Text("-Step 1-"),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -89,7 +93,7 @@ class _SelectCityState extends State<SelectCity> {
                     dropDownItemCount: 6,
                     dropDownList: _citiesNamesList,
                     onChanged: (value) => {
-                      if (value != "") {_selectedCity = value.name}
+                      if (value != "") {routesData.cityName = value.name}
                     },
                   ),
                 ),
@@ -100,10 +104,9 @@ class _SelectCityState extends State<SelectCity> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_selectedCity != "") {
-            Navigator.pushNamed(
-                context,
-                '/list_cinemas', arguments: _selectedCity);
+          if (routesData.cityName != "") {
+            Navigator.pushNamed(context, '/list_cinemas',
+                arguments: routesData);
           }
           formKey.currentState!.validate();
         },
