@@ -125,7 +125,7 @@ class _SelectCityState extends State<SelectCity> {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             if (role == 0) {
-              Navigator.pushNamed(context, '/list_cinemas',
+              Navigator.pushNamed(context, '/user_list_cinemas',
                   arguments: userRoutesData);
             }
             else if (role == 1) {
