@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../callApi/checkingExistenceOfAccount.dart';
-import '../models/Account.dart';
+import '../models/account.dart';
 
 class Authorization extends StatelessWidget {
   Authorization({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class Authorization extends StatelessWidget {
                   ElevatedButton(
                     child: const Text("LOG IN"),
                     onPressed: () async {
-                      account = await checkingExistenceOfAccount(_email, _pw);
+                      account = await checkingExistenceOfAccount(_email.trim(), _pw.trim());
                       if ((account != null)) {
                         role = account!.role;
                         Navigator.pushNamed(context, "/cities", arguments: role);

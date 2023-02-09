@@ -25,8 +25,11 @@ class EditPlace extends StatelessWidget {
               children: [
                 // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                 TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.place.row = int.parse(value)},
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      routesData.place.row = int.parse(value);
+                    }
+                  },
                   decoration: const InputDecoration(labelText: "Row number"),
                   initialValue: routesData.place.row.toString(),
                   validator: (value) {
@@ -37,8 +40,11 @@ class EditPlace extends StatelessWidget {
                   },
                 ),
                 TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.place.seatNumber = int.parse(value)},
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      routesData.place.seatNumber = int.parse(value);
+                    }
+                  },
                   decoration: const InputDecoration(labelText: "Seat number"),
                   initialValue: routesData.place.seatNumber.toString(),
                   validator: (value) {

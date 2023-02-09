@@ -29,7 +29,6 @@ class AddCinema extends StatelessWidget {
                     onChanged: (String value) => {cinema.name = value},
                     decoration:
                         const InputDecoration(labelText: "Cinema name"),
-                    initialValue: cinema.name,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter cinema name';
@@ -40,7 +39,6 @@ class AddCinema extends StatelessWidget {
                   TextFormField(
                     onChanged: (String value) => {cinema.cityName = value},
                     decoration: const InputDecoration(labelText: "City name"),
-                    initialValue: cinema.cityName,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter city name';
@@ -51,7 +49,6 @@ class AddCinema extends StatelessWidget {
                   TextFormField(
                     onChanged: (String value) => {cinema.address = value},
                     decoration: const InputDecoration(labelText: "Address"),
-                    initialValue: cinema.address,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter address of cinema';

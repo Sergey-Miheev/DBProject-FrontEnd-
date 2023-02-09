@@ -34,10 +34,12 @@ class AddHall extends StatelessWidget {
                 children: [
                   // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                   TextFormField(
-                    onChanged: (String value) =>
-                        {hall!.number = int.parse(value)},
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        hall!.number = int.parse(value);
+                      }
+                    },
                     decoration: const InputDecoration(labelText: "Hall number"),
-                    initialValue: hall!.number.toString(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter hall number';
@@ -46,10 +48,12 @@ class AddHall extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    onChanged: (String value) =>
-                        {hall!.type = int.parse(value)},
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        hall!.type = int.parse(value);
+                      }
+                    },
                     decoration: const InputDecoration(labelText: "Hall type"),
-                    initialValue: hall!.type.toString(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter hall type';
@@ -58,11 +62,13 @@ class AddHall extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    onChanged: (String value) =>
-                        {hall!.capacity = int.parse(value)},
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        hall!.capacity = int.parse(value);
+                      }
+                    },
                     decoration:
                         const InputDecoration(labelText: "Hall capacity"),
-                    initialValue: hall!.capacity.toString(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter hall capacity';

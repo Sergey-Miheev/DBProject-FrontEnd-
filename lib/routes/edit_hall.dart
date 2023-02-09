@@ -25,8 +25,11 @@ class EditHall extends StatelessWidget {
               children: [
                 // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                 TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.hall.number = int.parse(value)},
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      routesData.hall.number = int.parse(value);
+                    }
+                  },
                   decoration: const InputDecoration(labelText: "Hall number"),
                   initialValue: routesData.hall.number.toString(),
                   validator: (value) {
@@ -37,8 +40,11 @@ class EditHall extends StatelessWidget {
                   },
                 ),
                 TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.hall.type = int.parse(value)},
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      routesData.hall.type = int.parse(value);
+                    }
+                  },
                   decoration: const InputDecoration(labelText: "Hall type"),
                   initialValue: routesData.hall.type.toString(),
                   validator: (value) {
@@ -49,8 +55,11 @@ class EditHall extends StatelessWidget {
                   },
                 ),
                 TextFormField(
-                  onChanged: (String value) =>
-                      {routesData.hall.capacity = int.parse(value)},
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      routesData.hall.capacity = int.parse(value);
+                    }
+                  },
                   decoration: const InputDecoration(labelText: "Hall capacity"),
                   initialValue: routesData.hall.capacity.toString(),
                   validator: (value) {
