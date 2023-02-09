@@ -1,6 +1,7 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:place_booking/models/place.dart';
+import 'package:place_booking/models/user_data_for_routes.dart';
 import '../callApi/getCities.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
@@ -32,6 +33,8 @@ class _SelectCityState extends State<SelectCity> {
           sessions: []),
       Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
+  UserRoutesData userRoutesData = UserRoutesData(3, "", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []));
+
   void wrapCities() async {
     List<String>? response = await getCities();
     if (response != null) {
@@ -58,6 +61,8 @@ class _SelectCityState extends State<SelectCity> {
 
   @override
   Widget build(BuildContext context) {
+    int role = ModalRoute.of(context)?.settings.arguments as int;
+    userRoutesData.role = role;
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -89,7 +94,6 @@ class _SelectCityState extends State<SelectCity> {
                   Form(
                     key: formKey,
                     child: DropDownTextField(
-                      // initialValue: "name4",
                       readOnly: false,
                       controller: _cnt,
                       clearOption: true,
@@ -105,8 +109,11 @@ class _SelectCityState extends State<SelectCity> {
                       },
                       dropDownItemCount: 6,
                       dropDownList: _citiesNamesList,
-                      onChanged: (value) => {
-                        if (value != "") {routesData.cityName = value.name}
+                      onChanged: (value) {
+                        if (value != "") {
+                          routesData.cityName = value.name;
+                          userRoutesData.cityName = value.name;
+                        }
                       },
                     ),
                   ),
@@ -117,13 +124,34 @@ class _SelectCityState extends State<SelectCity> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (routesData.cityName != "") {
+            if (role == 0) {
               Navigator.pushNamed(context, '/list_cinemas',
-                  arguments: routesData);
+                  arguments: userRoutesData);
+            }
+            else if (role == 1) {
+              if (routesData.cityName != "") {
+                Navigator.pushNamed(context, '/list_cinemas',
+                    arguments: routesData);
+              }
+              else {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Вы не выбрали город!"),
+                      content: const Text(
+                          "Выберите город из списка предложенных."),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Хорошо'),
+                        )
+                      ],
+                    ));
+              }
             }
             formKey.currentState!.validate();
           },
-          label: const Text("Submit"),
+          label: const Text("Перейти"),
         ),
       ),
       onWillPop: () async {

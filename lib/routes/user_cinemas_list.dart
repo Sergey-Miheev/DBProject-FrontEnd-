@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/get_cinemas_of_city.dart';
-import 'package:place_booking/models/data_for_routes.dart';
+import 'package:place_booking/models/user_data_for_routes.dart';
 import '../models/cinema.dart';
-import '../models/hall.dart';
-import '../models/place.dart';
 
 class CinemaCard extends StatelessWidget {
   CinemaCard({required this.cinema, required this.localRoutesData, Key? key})
       : super(key: key);
 
   Cinema cinema;
-  RoutesData localRoutesData;
+  UserRoutesData localRoutesData;
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +31,21 @@ class CinemaCard extends StatelessWidget {
   }
 }
 
-class CinemaList extends StatefulWidget {
-  CinemaList({Key? key}) : super(key: key);
+class UserCinemaList extends StatefulWidget {
+  UserCinemaList({Key? key}) : super(key: key);
 
   @override
-  State<CinemaList> createState() => _CinemaListState();
+  State<UserCinemaList> createState() => _UserCinemaListState();
 }
 
-class _CinemaListState extends State<CinemaList> {
+class _UserCinemaListState extends State<UserCinemaList> {
   List<Cinema> _cinemas = [];
 
-  RoutesData routesData = RoutesData(
-      "",
-      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
-      Hall(
-          idHall: 0,
-          idCinema: 0,
-          number: 0,
-          type: 0,
-          capacity: 0,
-          places: [],
-          sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
+  UserRoutesData routesData = UserRoutesData(
+    3,
+    "",
+    Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
+  );
 
   void getCinemas() async {
     List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
@@ -72,7 +63,7 @@ class _CinemaListState extends State<CinemaList> {
 
   @override
   void didChangeDependencies() {
-    routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
+    routesData = ModalRoute.of(context)?.settings.arguments as UserRoutesData;
     getCinemas();
     super.didChangeDependencies();
   }
@@ -82,7 +73,7 @@ class _CinemaListState extends State<CinemaList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Edit cinemas page-"),
+          title: Text("-Cinemas of ${routesData.cityName}-"),
           centerTitle: true,
         ),
         body: ListView.separated(
@@ -98,19 +89,10 @@ class _CinemaListState extends State<CinemaList> {
               return CinemaCard(
                   localRoutesData: routesData, cinema: _cinemas[index]);
             }),
-        floatingActionButton: OutlinedButton(
-          onPressed: () => Navigator.pushNamed(context, "/add_cinema",
-              arguments: routesData),
-          child: const Icon(
-            Icons.add,
-            size: Checkbox.width * 3,
-            color: Colors.green,
-          ),
-        ),
       ),
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, '/cities',
-            arguments: routesData);
+            arguments: routesData.role);
         return Future.value(true);
       },
     );

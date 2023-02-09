@@ -27,7 +27,11 @@ class Authorization extends StatelessWidget {
               ),
               TextField(
                 decoration: const InputDecoration(labelText: "Email"),
-                onChanged: (String value) => {_email = value},
+                onChanged: (String value) {
+                  if (value != "") {
+                    _email = value;
+                  }
+                  },
               ),
               const SizedBox(
                 height: 12,
@@ -35,7 +39,11 @@ class Authorization extends StatelessWidget {
               TextField(
                 obscureText: true,
                 decoration: const InputDecoration(labelText: "Password"),
-                onChanged: (String value) => {_pw = value},
+                onChanged: (String value) {
+                  if (value != "") {
+                    _pw = value;
+                  }
+                },
               ),
               OverflowBar(
                 alignment: MainAxisAlignment.end,
@@ -50,8 +58,12 @@ class Authorization extends StatelessWidget {
                     onPressed: () async {
                       account = await checkingExistenceOfAccount(_email.trim(), _pw.trim());
                       if ((account != null)) {
-                        role = account!.role;
-                        Navigator.pushNamed(context, "/cities", arguments: role);
+                        if (account!.role == 0) {
+                          Navigator.pushReplacementNamed(context, "/cities", arguments: role);
+                        }
+                        else if (account!.role == 1){
+                          Navigator.pushReplacementNamed(context, "/cities", arguments: role);
+                        }
                       }
                       //if (await checkRegisterOfEmail(_email, _pw) != null) {
                       else {
