@@ -10,6 +10,8 @@ import 'package:place_booking/routes/edit_place.dart';
 import 'package:place_booking/routes/halls_list.dart';
 import 'package:place_booking/routes/places_list.dart';
 import 'package:place_booking/routes/user_cinemas_list.dart';
+import 'package:place_booking/routes/user_films_list.dart';
+import 'package:place_booking/routes/user_sessions_list.dart';
 import 'package:place_booking/routes/welcome.dart';
 import 'routes/select_city.dart';
 import 'routes/sign_up.dart';
@@ -49,6 +51,8 @@ void main() {
         '/add_place': (context) => AddPlace(),
         '/edit_place': (context) => EditPlace(),
         '/user_list_cinemas': (context) => UserCinemaList(),
+        '/user_list_films': (context) => UserFilmsList(),
+        '/user_list_sessions': (context) => UserSessionsList(),
       },
     ),
   );
@@ -56,6 +60,6 @@ void main() {
 
 /*
 1. Я пользователь:
-Вход/регистрация -> выбор города -> список кинотеатров -> список сеансов ->
+Вход/регистрация -> выбор города -> список кинотеатров -> список фильмов -> список сеансов ->
 список мест в зале для бронирования + куда-то личный кабинет со списком его броней и личной информацией
  */

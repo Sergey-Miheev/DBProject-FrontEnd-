@@ -1,10 +1,12 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:place_booking/models/place.dart';
+import 'package:place_booking/models/session.dart';
 import 'package:place_booking/models/user_data_for_routes.dart';
 import '../callApi/getCities.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
+import '../models/film.dart';
 import '../models/hall.dart';
 
 class SelectCity extends StatefulWidget {
@@ -33,7 +35,17 @@ class _SelectCityState extends State<SelectCity> {
           sessions: []),
       Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
-  UserRoutesData userRoutesData = UserRoutesData(3, "", Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []));
+  UserRoutesData userRoutesData = UserRoutesData(
+      3,
+      "",
+      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
+      Film(idFilm: 0, duration: "", name: "", ageRating: 0, description: "", roles: [], sessions: []),
+      Session(
+          idSession: 0,
+          idHall: 2,
+          idFilm: 1,
+          dateTime: DateTime.now(),
+          bookings: []));
 
   void wrapCities() async {
     List<String>? response = await getCities();
@@ -127,26 +139,24 @@ class _SelectCityState extends State<SelectCity> {
             if (role == 0) {
               Navigator.pushNamed(context, '/user_list_cinemas',
                   arguments: userRoutesData);
-            }
-            else if (role == 1) {
+            } else if (role == 1) {
               if (routesData.cityName != "") {
                 Navigator.pushNamed(context, '/list_cinemas',
                     arguments: routesData);
-              }
-              else {
+              } else {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Вы не выбрали город!"),
-                      content: const Text(
-                          "Выберите город из списка предложенных."),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Хорошо'),
-                        )
-                      ],
-                    ));
+                          title: const Text("Вы не выбрали город!"),
+                          content: const Text(
+                              "Выберите город из списка предложенных."),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Хорошо'),
+                            )
+                          ],
+                        ));
               }
             }
             formKey.currentState!.validate();

@@ -1,55 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/callApi/get_cinemas_of_city.dart';
 import 'package:place_booking/models/user_data_for_routes.dart';
+import '../callApi/get_films_shown_in_cinema.dart';
 import '../models/cinema.dart';
 import '../models/film.dart';
 import '../models/session.dart';
 
-class CinemaCard extends StatelessWidget {
-  CinemaCard({required this.cinema, required this.localRoutesData, Key? key})
+class FilmCard extends StatelessWidget {
+  FilmCard({required this.film, required this.localRoutesData, Key? key})
       : super(key: key);
 
-  Cinema cinema;
+  Film film;
   UserRoutesData localRoutesData;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        localRoutesData.cinema = cinema;
-        Navigator.pushNamed(context, "/user_list_films",
+        localRoutesData.film = film;
+        Navigator.pushNamed(context, "/user_list_sessions",
             arguments: localRoutesData);
       },
-      title: Text(cinema.name,
+      title: Text(film.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Address: ${cinema.address}",
+      subtitle: Text(film.description,
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
+      leading: Text(film.ageRating.toString(),
+          style: const TextStyle(fontSize: 16, color: Colors.redAccent)),
     );
   }
 }
 
-class UserCinemaList extends StatefulWidget {
-  UserCinemaList({Key? key}) : super(key: key);
+class UserFilmsList extends StatefulWidget {
+  UserFilmsList({Key? key}) : super(key: key);
 
   @override
-  State<UserCinemaList> createState() => _UserCinemaListState();
+  State<UserFilmsList> createState() => _UserFilmsListState();
 }
 
-class _UserCinemaListState extends State<UserCinemaList> {
-  List<Cinema> _cinemas = [];
+class _UserFilmsListState extends State<UserFilmsList> {
+  List<Film> _films = [];
 
   UserRoutesData routesData = UserRoutesData(
       3,
       "",
       Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
-      Film(
-          idFilm: 0,
-          duration: "",
-          name: "",
-          ageRating: 0,
-          description: "",
-          roles: [],
-          sessions: []),
+      Film(idFilm: 0, duration: "", name: "", ageRating: 0, description: "", roles: [], sessions: []),
       Session(
           idSession: 0,
           idHall: 2,
@@ -57,11 +52,11 @@ class _UserCinemaListState extends State<UserCinemaList> {
           dateTime: DateTime.now(),
           bookings: []));
 
-  void getCinemas() async {
-    List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
+  void getFilms() async {
+    List<Film>? response = await getFilmsShownInCinema(routesData.cinema.idCinema);
     if (response != null) {
       setState(() {
-        _cinemas = response;
+        _films = response;
       });
     }
   }
@@ -74,7 +69,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
   @override
   void didChangeDependencies() {
     routesData = ModalRoute.of(context)?.settings.arguments as UserRoutesData;
-    getCinemas();
+    getFilms();
     super.didChangeDependencies();
   }
 
@@ -83,26 +78,26 @@ class _UserCinemaListState extends State<UserCinemaList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("-Cinemas of ${routesData.cityName}-"),
+          title: Text("-Films in ${routesData.cinema.name}-"),
           centerTitle: true,
         ),
         body: ListView.separated(
             separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  color: Colors.black,
-                  height: 10,
-                  thickness: 2,
-                ),
-            itemCount: _cinemas.length,
+            const Divider(
+              color: Colors.black,
+              height: 10,
+              thickness: 2,
+            ),
+            itemCount: _films.length,
             padding: const EdgeInsets.all(20),
             itemBuilder: (BuildContext context, int index) {
-              return CinemaCard(
-                  localRoutesData: routesData, cinema: _cinemas[index]);
+              return FilmCard(
+                  localRoutesData: routesData, film: _films[index]);
             }),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/cities',
-            arguments: routesData.role);
+        Navigator.pushReplacementNamed(context, '/user_list_cinemas',
+            arguments: routesData);
         return Future.value(true);
       },
     );
