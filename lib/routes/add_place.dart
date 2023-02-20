@@ -59,8 +59,8 @@ class AddPlace extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       Place? potentiallyPlace =
-                          await placeExistenceCheck(place);
-                      if (potentiallyPlace != null) {
+                          await placeExistenceCheck(place!.idHall,place!.row,place!.seatNumber);
+                      if (potentiallyPlace == null) {
                         routesData.place = (await createPlace(
                             place!.idHall, place!.row, place!.seatNumber))!;
                         Navigator.pushReplacementNamed(context, '/list_places',

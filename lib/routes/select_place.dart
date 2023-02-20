@@ -1,39 +1,23 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/place.dart';
-import 'package:place_booking/models/session.dart';
-import 'package:place_booking/models/user_data_for_routes.dart';
-import '../callApi/getCities.dart';
-import '../models/cinema.dart';
-import '../models/data_for_routes.dart';
-import '../models/film.dart';
-import '../models/hall.dart';
 
-class SelectCity extends StatefulWidget {
-  const SelectCity({Key? key}) : super(key: key);
+import '../models/cinema.dart';
+import '../models/film.dart';
+import '../models/session.dart';
+import '../models/user_data_for_routes.dart';
+/*
+class SelectPlace extends StatefulWidget {
+  const SelectPlace({Key? key}) : super(key: key);
 
   @override
-  State<SelectCity> createState() => _SelectCityState();
+  State<SelectPlace> createState() => _SelectCityState();
 }
 
-class _SelectCityState extends State<SelectCity> {
+class _SelectCityState extends State<SelectPlace> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late SingleValueDropDownController _cnt;
   final formKey = GlobalKey<FormState>();
   final List<DropDownValueModel> _citiesNamesList = [];
-
-  RoutesData routesData = RoutesData(
-      "",
-      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
-      Hall(
-          idHall: 0,
-          idCinema: 0,
-          number: 0,
-          type: 0,
-          capacity: 0,
-          places: [],
-          sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
 
   UserRoutesData userRoutesData = UserRoutesData(
       3,
@@ -122,7 +106,6 @@ class _SelectCityState extends State<SelectCity> {
                       dropDownList: _citiesNamesList,
                       onChanged: (value) {
                         if (value != "") {
-                          routesData.cityName = value.name;
                           userRoutesData.cityName = value.name;
                         }
                       },
@@ -148,16 +131,16 @@ class _SelectCityState extends State<SelectCity> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text("Вы не выбрали город!"),
-                          content: const Text(
-                              "Выберите город из списка предложенных."),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Хорошо'),
-                            )
-                          ],
-                        ));
+                      title: const Text("Вы не выбрали город!"),
+                      content: const Text(
+                          "Выберите город из списка предложенных."),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Хорошо'),
+                        )
+                      ],
+                    ));
               }
             }
             formKey.currentState!.validate();
@@ -171,4 +154,4 @@ class _SelectCityState extends State<SelectCity> {
       },
     );
   }
-}
+}*/
