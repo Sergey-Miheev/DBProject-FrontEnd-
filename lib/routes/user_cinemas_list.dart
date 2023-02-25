@@ -22,7 +22,7 @@ class CinemaCard extends StatelessWidget {
       },
       title: Text(cinema.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Address: ${cinema.address}",
+      subtitle: Text("Адрес: ${cinema.address}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -38,8 +38,7 @@ class UserCinemaList extends StatefulWidget {
 class _UserCinemaListState extends State<UserCinemaList> {
   List<Cinema> _cinemas = [];
 
-  UserRoutesData routesData = UserRoutesData(
-      3,
+  UserRoutesData userRoutesData = UserRoutesData(
       "",
       Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
       Film(
@@ -58,7 +57,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
           bookings: []));
 
   void getCinemas() async {
-    List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
+    List<Cinema>? response = await getCinemasOfCity(userRoutesData.cityName);
     if (response != null) {
       setState(() {
         _cinemas = response;
@@ -73,7 +72,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
 
   @override
   void didChangeDependencies() {
-    routesData = ModalRoute.of(context)?.settings.arguments as UserRoutesData;
+    userRoutesData = ModalRoute.of(context)?.settings.arguments as UserRoutesData;
     getCinemas();
     super.didChangeDependencies();
   }
@@ -83,7 +82,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("-Cinemas of ${routesData.cityName}-"),
+          title: const Text("Кинотеатры"),
           centerTitle: true,
         ),
         body: ListView.separated(
@@ -97,12 +96,12 @@ class _UserCinemaListState extends State<UserCinemaList> {
             padding: const EdgeInsets.all(20),
             itemBuilder: (BuildContext context, int index) {
               return CinemaCard(
-                  localRoutesData: routesData, cinema: _cinemas[index]);
+                  localRoutesData: userRoutesData, cinema: _cinemas[index]);
             }),
       ),
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, '/cities',
-            arguments: routesData.role);
+            arguments: userRoutesData);
         return Future.value(true);
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:place_booking/callApi/get_cinemas_of_city.dart';
+import 'package:place_booking/models/account.dart';
 import 'package:place_booking/models/data_for_routes.dart';
 import '../models/cinema.dart';
 import '../models/hall.dart';
@@ -109,8 +110,9 @@ class _CinemaListState extends State<CinemaList> {
         ),
       ),
       onWillPop: () async {
+        Account? acc = Account(idAccount: 0, name: "", email: "", password: "", dateOfBirthday: DateTime.now(), role: 1, bookings: []);
         Navigator.pushReplacementNamed(context, '/cities',
-            arguments: routesData);
+            arguments: acc);
         return Future.value(true);
       },
     );

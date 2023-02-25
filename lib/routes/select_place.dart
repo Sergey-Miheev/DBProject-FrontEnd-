@@ -1,11 +1,16 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-
+import '../callApi/create_booking.dart';
+import '../callApi/getSeatNumbers.dart';
 import '../models/cinema.dart';
 import '../models/film.dart';
+import '../models/place.dart';
+import '../models/placeInfo.dart';
 import '../models/session.dart';
 import '../models/user_data_for_routes.dart';
-/*
+import '../callApi/getRows.dart';
+import 'package:random_string_generator/random_string_generator.dart';
+
 class SelectPlace extends StatefulWidget {
   const SelectPlace({Key? key}) : super(key: key);
 
@@ -17,13 +22,21 @@ class _SelectCityState extends State<SelectPlace> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late SingleValueDropDownController _cnt;
   final formKey = GlobalKey<FormState>();
-  final List<DropDownValueModel> _citiesNamesList = [];
+  final List<DropDownValueModel> _rowsNumbersList = [];
+  List<DropDownValueModel> seatNumbersList = [];
+  Place place = Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []);
 
   UserRoutesData userRoutesData = UserRoutesData(
-      3,
       "",
       Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
-      Film(idFilm: 0, duration: "", name: "", ageRating: 0, description: "", roles: [], sessions: []),
+      Film(
+          idFilm: 0,
+          duration: "",
+          name: "",
+          ageRating: 0,
+          description: "",
+          roles: [],
+          sessions: []),
       Session(
           idSession: 0,
           idHall: 2,
@@ -31,12 +44,25 @@ class _SelectCityState extends State<SelectPlace> {
           dateTime: DateTime.now(),
           bookings: []));
 
-  void wrapCities() async {
-    List<String>? response = await getCities();
+  void getRows() async {
+    _rowsNumbersList.clear();
+    List<int>? response = await getRowsData(userRoutesData.info!.idHall);
     if (response != null) {
-      for (String cityName in response) {
-        _citiesNamesList
-            .add(DropDownValueModel(name: cityName, value: cityName));
+      for (int rowNumber in response) {
+        _rowsNumbersList.add(DropDownValueModel(
+            name: rowNumber.toString(), value: rowNumber.toString()));
+      }
+    }
+    setState(() {});
+  }
+
+  void getSeatNums() async {
+    seatNumbersList.clear();
+    List<PlaceInfo>? response = await getSeatNumbers(userRoutesData.info!.idHall, place.row);
+    if (response != null) {
+      for (var seat in response) {
+        seatNumbersList.add(DropDownValueModel(
+            name: seat.seatNumber.toString(), value: seat.idPlace.toString()));
       }
     }
     setState(() {});
@@ -45,8 +71,15 @@ class _SelectCityState extends State<SelectPlace> {
   @override
   void initState() {
     _cnt = SingleValueDropDownController();
-    wrapCities();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    userRoutesData =
+    ModalRoute.of(context)?.settings.arguments as UserRoutesData;
+    getRows();
+    super.didChangeDependencies();
   }
 
   @override
@@ -57,11 +90,10 @@ class _SelectCityState extends State<SelectPlace> {
 
   @override
   Widget build(BuildContext context) {
-    //int role = ModalRoute.of(context)?.settings.arguments as int;
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Step 1-"),
+          title: const Text("Заполните все поля"),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -76,40 +108,74 @@ class _SelectCityState extends State<SelectPlace> {
                     height: 70,
                   ),
                   const Text(
-                    "Please, select a city, where you want watch movie",
+                    "Выберите, пожалуйста, ряд, в котором хотите забронировать место",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 14,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  Form(
-                    key: formKey,
-                    child: DropDownTextField(
-                      readOnly: false,
-                      controller: _cnt,
-                      clearOption: true,
-                      keyboardType: TextInputType.number,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      clearIconProperty: IconProperty(color: Colors.green),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Required field";
-                        } else {
-                          return null;
-                        }
-                      },
-                      dropDownItemCount: 6,
-                      dropDownList: _citiesNamesList,
-                      onChanged: (value) {
-                        if (value != "") {
-                          userRoutesData.cityName = value.name;
-                        }
-                      },
+                  DropDownTextField(
+                    readOnly: false,
+                    controller: _cnt,
+                    clearOption: true,
+                    keyboardType: TextInputType.number,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    clearIconProperty: IconProperty(color: Colors.green),
+                    validator: (rowVal) {
+                      if (rowVal == null || rowVal.isEmpty) {
+                        return "Выберите ряд";
+                      } else {
+                        return null;
+                      }
+                    },
+                    dropDownItemCount: 6,
+                    dropDownList: _rowsNumbersList,
+                    onChanged: (rowValue) {
+                      if (rowValue != "" || rowValue != null) {
+                        place.row = int.parse(rowValue.name.toString());
+                        getSeatNums();
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Выберите, пожалуйста, место которое хотите забронировать",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DropDownTextField(
+                    readOnly: false,
+                    clearOption: true,
+                    keyboardType: TextInputType.number,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    clearIconProperty: IconProperty(color: Colors.green),
+                    validator: (seatVal) {
+                      if (seatVal == null || seatVal.isEmpty) {
+                        return "Выберите место";
+                      } else {
+                        return null;
+                      }
+                    },
+                    dropDownItemCount: 6,
+                    dropDownList: seatNumbersList,
+                    onChanged: (seatValue) {
+                      if (seatValue != "" || seatValue != null) {
+                        place.seatNumber = int.parse(seatValue.name.toString());
+                        place.idPlace = int.parse(seatValue.value.toString());
+                      }
+                    },
                   ),
                 ],
               ),
@@ -118,40 +184,34 @@ class _SelectCityState extends State<SelectPlace> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            userRoutesData.role = ModalRoute.of(context)?.settings.arguments as int;
-            print(userRoutesData.role);
-            if (userRoutesData.role == 0) {
+            var generator = RandomStringGenerator(fixedLength: 20);
+            if (userRoutesData.cityName != "") {
+              createBooking(userRoutesData.info!.idSession, place.idPlace, userRoutesData.account!.idAccount, generator.generate(), DateTime.now().toString());
               Navigator.pushNamed(context, '/user_list_cinemas',
                   arguments: userRoutesData);
-            } else if (userRoutesData.role == 1) {
-              if (routesData.cityName != "") {
-                Navigator.pushNamed(context, '/list_cinemas',
-                    arguments: routesData);
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Вы не выбрали город!"),
-                      content: const Text(
-                          "Выберите город из списка предложенных."),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Хорошо'),
-                        )
-                      ],
-                    ));
-              }
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: const Text("Вы не выбрали ряд!"),
+                        content: const Text(
+                            "Выберите ряд из списка предложенных."),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Хорошо'),
+                          )
+                        ],
+                      ));
             }
-            formKey.currentState!.validate();
           },
           label: const Text("Перейти"),
         ),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/log_in');
+        Navigator.pushReplacementNamed(context, '/user_list_sessions', arguments: userRoutesData);
         return Future.value(true);
       },
     );
   }
-}*/
+}

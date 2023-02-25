@@ -36,14 +36,14 @@ class SessionCard extends StatelessWidget {
     return ListTile(
       onTap: () {
         localRoutesData.info = sessionInfo;
-        Navigator.pushNamed(context, "/user_list_cinemas",
+        Navigator.pushNamed(context, "/places",
             arguments: localRoutesData);
       },
-      title: Text(sessionInfo.dateTime.toString(),
+      title: Text(sessionInfo.dateTime.toString().substring(0, 16),
           style: const TextStyle(fontSize: 18, color: Colors.black)),
-      subtitle: Text("Hall type: $hallType",
+      subtitle: Text("Тип зала: $hallType",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
-      leading: Text("Hall: ${sessionInfo.hallNumber}",
+      leading: Text("Номер зала: ${sessionInfo.hallNumber}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -60,7 +60,6 @@ class _UserSessionsListState extends State<UserSessionsList> {
   List<SessionInfo> _sessions = [];
 
   UserRoutesData routesData = UserRoutesData(
-      3,
       "",
       Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
       Film(idFilm: 0, duration: "", name: "", ageRating: 0, description: "", roles: [], sessions: []),
@@ -97,7 +96,7 @@ class _UserSessionsListState extends State<UserSessionsList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("-Sessions on ${routesData.film.name}-"),
+          title: Text("Сеансы на \"${routesData.film.name}\""),
           centerTitle: true,
         ),
         body: ListView.separated(

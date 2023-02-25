@@ -24,7 +24,7 @@ class FilmCard extends StatelessWidget {
           style: const TextStyle(fontSize: 22, color: Colors.black)),
       subtitle: Text(film.description,
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
-      leading: Text(film.ageRating.toString(),
+      leading: Text("${film.ageRating.toString()}+",
           style: const TextStyle(fontSize: 16, color: Colors.redAccent)),
     );
   }
@@ -41,7 +41,6 @@ class _UserFilmsListState extends State<UserFilmsList> {
   List<Film> _films = [];
 
   UserRoutesData routesData = UserRoutesData(
-      3,
       "",
       Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
       Film(idFilm: 0, duration: "", name: "", ageRating: 0, description: "", roles: [], sessions: []),
@@ -78,7 +77,7 @@ class _UserFilmsListState extends State<UserFilmsList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("-Films in ${routesData.cinema.name}-"),
+          title: Text("Фильмы в ${routesData.cinema.name}"),
           centerTitle: true,
         ),
         body: ListView.separated(

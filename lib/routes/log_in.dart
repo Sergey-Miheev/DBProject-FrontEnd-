@@ -58,14 +58,9 @@ class Authorization extends StatelessWidget {
                     onPressed: () async {
                       account = await checkingExistenceOfAccount(_email.trim(), _pw.trim());
                       if ((account != null)) {
-                        if (account!.role == 0) {
-                          Navigator.pushReplacementNamed(context, "/cities", arguments: account!.role);
-                        }
-                        else if (account!.role == 1){
-                          Navigator.pushReplacementNamed(context, "/cities", arguments: account!.role);
-                        }
+                        Navigator.pushReplacementNamed(
+                            context, "/cities", arguments: account);
                       }
-                      //if (await checkRegisterOfEmail(_email, _pw) != null) {
                       else {
                         showDialog(
                             context: context,

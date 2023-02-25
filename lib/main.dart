@@ -9,6 +9,7 @@ import 'package:place_booking/routes/edit_hall.dart';
 import 'package:place_booking/routes/edit_place.dart';
 import 'package:place_booking/routes/halls_list.dart';
 import 'package:place_booking/routes/places_list.dart';
+import 'package:place_booking/routes/select_place.dart';
 import 'package:place_booking/routes/user_cinemas_list.dart';
 import 'package:place_booking/routes/user_films_list.dart';
 import 'package:place_booking/routes/user_sessions_list.dart';
@@ -53,6 +54,7 @@ void main() {
         '/user_list_cinemas': (context) => UserCinemaList(),
         '/user_list_films': (context) => UserFilmsList(),
         '/user_list_sessions': (context) => UserSessionsList(),
+        '/places': (context) => SelectPlace(),
       },
     ),
   );

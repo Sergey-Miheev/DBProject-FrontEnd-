@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
-import '../models/session.dart';
 import '../models/session_info.dart';
 
 String baseUrl = 'https://10.0.2.2:7099/sessions';

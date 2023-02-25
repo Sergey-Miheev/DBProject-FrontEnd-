@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'package:json_annotation/json_annotation.dart';
 
 Account accountFromJson(String str) => Account.fromJson(json.decode(str));
 
 String accountToJson(Account data) => json.encode(data.toJson());
 
-@JsonSerializable()
 class Account {
   Account({
     required this.idAccount,

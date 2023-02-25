@@ -1,5 +1,4 @@
 import 'package:place_booking/models/place.dart';
-
 import 'cinema.dart';
 import 'hall.dart';
 
