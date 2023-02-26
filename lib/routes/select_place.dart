@@ -2,6 +2,7 @@ import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import '../callApi/create_booking.dart';
 import '../callApi/getSeatNumbers.dart';
+import '../callApi/get_reserved_seats.dart';
 import '../models/cinema.dart';
 import '../models/film.dart';
 import '../models/place.dart';
@@ -24,7 +25,8 @@ class _SelectCityState extends State<SelectPlace> {
   final formKey = GlobalKey<FormState>();
   final List<DropDownValueModel> _rowsNumbersList = [];
   List<DropDownValueModel> seatNumbersList = [];
-  Place place = Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []);
+  Place place =
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []);
 
   UserRoutesData userRoutesData = UserRoutesData(
       "",
@@ -58,11 +60,17 @@ class _SelectCityState extends State<SelectPlace> {
 
   void getSeatNums() async {
     seatNumbersList.clear();
-    List<PlaceInfo>? response = await getSeatNumbers(userRoutesData.info!.idHall, place.row);
-    if (response != null) {
-      for (var seat in response) {
-        seatNumbersList.add(DropDownValueModel(
-            name: seat.seatNumber.toString(), value: seat.idPlace.toString()));
+    List<PlaceInfo>? seatNums =
+        await getSeatNumbers(userRoutesData.info!.idHall, place.row);
+    List<int>? reservedSeatsIds = await getReservedSeatsId(
+        userRoutesData.info!.idSession, userRoutesData.info!.idHall);
+    if (seatNums != null && reservedSeatsIds != null) {
+      for (var seat in seatNums) {
+        if (!reservedSeatsIds.contains(seat.idPlace)) {
+          seatNumbersList.add(DropDownValueModel(
+              name: seat.seatNumber.toString(),
+              value: seat.idPlace.toString()));
+        }
       }
     }
     setState(() {});
@@ -77,7 +85,7 @@ class _SelectCityState extends State<SelectPlace> {
   @override
   void didChangeDependencies() {
     userRoutesData =
-    ModalRoute.of(context)?.settings.arguments as UserRoutesData;
+        ModalRoute.of(context)?.settings.arguments as UserRoutesData;
     getRows();
     super.didChangeDependencies();
   }
@@ -93,7 +101,7 @@ class _SelectCityState extends State<SelectPlace> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Заполните все поля"),
+          title: const Text("Бронируйте!"),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -108,7 +116,7 @@ class _SelectCityState extends State<SelectPlace> {
                     height: 70,
                   ),
                   const Text(
-                    "Выберите, пожалуйста, ряд, в котором хотите забронировать место",
+                    "Выберите, пожалуйста, ряд, в котором хотите забронировать место:",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -145,7 +153,7 @@ class _SelectCityState extends State<SelectPlace> {
                     height: 10,
                   ),
                   const Text(
-                    "Выберите, пожалуйста, место которое хотите забронировать",
+                    "Выберите, пожалуйста, место, которое хотите забронировать:",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -186,7 +194,12 @@ class _SelectCityState extends State<SelectPlace> {
           onPressed: () {
             var generator = RandomStringGenerator(fixedLength: 20);
             if (userRoutesData.cityName != "") {
-              createBooking(userRoutesData.info!.idSession, place.idPlace, userRoutesData.account!.idAccount, generator.generate(), DateTime.now().toString());
+              createBooking(
+                  userRoutesData.info!.idSession,
+                  place.idPlace,
+                  userRoutesData.account!.idAccount,
+                  generator.generate(),
+                  DateTime.now().toString());
               Navigator.pushNamed(context, '/user_list_cinemas',
                   arguments: userRoutesData);
             } else {
@@ -194,8 +207,8 @@ class _SelectCityState extends State<SelectPlace> {
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                         title: const Text("Вы не выбрали ряд!"),
-                        content: const Text(
-                            "Выберите ряд из списка предложенных."),
+                        content:
+                            const Text("Выберите ряд из списка предложенных."),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -209,7 +222,8 @@ class _SelectCityState extends State<SelectPlace> {
         ),
       ),
       onWillPop: () async {
-        Navigator.pushReplacementNamed(context, '/user_list_sessions', arguments: userRoutesData);
+        Navigator.pushReplacementNamed(context, '/user_list_sessions',
+            arguments: userRoutesData);
         return Future.value(true);
       },
     );

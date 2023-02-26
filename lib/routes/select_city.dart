@@ -99,7 +99,7 @@ class _SelectCityState extends State<SelectCity> {
                       height: 70,
                     ),
                     const Text(
-                      "Please, select a city, where you want watch movie",
+                      "Выберите, пожалуйста, город в котором хотите пойти в кинотеатр.",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -169,7 +169,7 @@ class _SelectCityState extends State<SelectCity> {
               }
               formKey.currentState!.validate();
             },
-            label: const Text("Перейти"),
+            label: const Text("ПЕРЕЙТИ"),
           ),
         ),
         onWillPop: () async {

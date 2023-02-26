@@ -15,7 +15,7 @@ class Welcome extends StatelessWidget {
             child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("Welcome", style: _sizeHeadingTextBlue),
+        Text("Добро пожаловать!", style: _sizeHeadingTextBlue),
         Padding(
           padding: const EdgeInsets.only(top: 25.0),
           child: MaterialButton(
@@ -23,7 +23,7 @@ class Welcome extends StatelessWidget {
             height: 50.0,
             minWidth: 150.0,
             child: Text(
-              "Log in",
+              "Войти",
               style: _sizeTextWhite,
             ),
             onPressed: () {
@@ -38,7 +38,7 @@ class Welcome extends StatelessWidget {
             height: 50.0,
             minWidth: 150.0,
             child: Text(
-              "Sign up",
+              "Зарегистрироваться",
               style: _sizeTextWhite,
             ),
             onPressed: () {

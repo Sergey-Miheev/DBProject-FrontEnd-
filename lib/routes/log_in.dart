@@ -15,7 +15,7 @@ class Authorization extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Log in"),
+          title: const Text("Войти"),
           centerTitle: true,
         ),
         body: SafeArea(
@@ -38,7 +38,7 @@ class Authorization extends StatelessWidget {
               ),
               TextField(
                 obscureText: true,
-                decoration: const InputDecoration(labelText: "Password"),
+                decoration: const InputDecoration(labelText: "Пароль"),
                 onChanged: (String value) {
                   if (value != "") {
                     _pw = value;
@@ -52,9 +52,9 @@ class Authorization extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(context, '/');
                       },
-                      child: const Text("CANCEL")),
+                      child: const Text("НАЗАД")),
                   ElevatedButton(
-                    child: const Text("LOG IN"),
+                    child: const Text("ВОЙТИ"),
                     onPressed: () async {
                       account = await checkingExistenceOfAccount(_email.trim(), _pw.trim());
                       if ((account != null)) {

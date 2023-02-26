@@ -16,7 +16,7 @@ class SignUp extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: const Text("Sign up"),
+            title: const Text("Регистрация"),
             centerTitle: true,
           ),
           body: SafeArea(
@@ -24,7 +24,7 @@ class SignUp extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: <Widget>[
                   TextField(
-                    decoration: const InputDecoration(labelText: "Name"),
+                    decoration: const InputDecoration(labelText: "Имя"),
                     onChanged: (String value) => {_name = value},
                   ),
                   TextField(
@@ -33,18 +33,18 @@ class SignUp extends StatelessWidget {
                   ),
                   TextField(
                     decoration:
-                        const InputDecoration(labelText: "Date of birthday(YYYY-MM-DD)"),
+                        const InputDecoration(labelText: "Дата рождения(ГГГГ-ММ-ДД)"),
                     onChanged: (String value) => {_dateOfBirthday = value},
                   ),
                   TextField(
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: const InputDecoration(labelText: "Пароль"),
                     onChanged: (String value) => {_pw = value},
                   ),
                   TextField(
                     obscureText: true,
                     decoration:
-                        const InputDecoration(labelText: "Repeat Password"),
+                        const InputDecoration(labelText: "Повторите пароль"),
                     onChanged: (String value) =>
                         {(value == _pw ? duplicate = true : duplicate = false)},
                   ),
@@ -55,9 +55,9 @@ class SignUp extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamed(context, '/log_in');
                           },
-                          child: const Text("CANCEL")),
+                          child: const Text("НАЗАД")),
                       ElevatedButton(
-                        child: const Text("SIGN UP"),
+                        child: const Text("ЗАРЕГИСТРИРОВАТЬСЯ"),
                         onPressed: () async {
                           if (duplicate) {
                             if (await checkRegisteredEmail(_email) == null) {
