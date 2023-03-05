@@ -101,7 +101,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
       ),
       onWillPop: () async {
         Navigator.pushReplacementNamed(context, '/cities',
-            arguments: userRoutesData);
+            arguments: userRoutesData.account);
         return Future.value(true);
       },
     );
