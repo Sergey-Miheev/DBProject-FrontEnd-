@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/data_for_routes.dart';
-import '../callApi/create_cinema.dart';
+import '../callApi/createCinema.dart';
+import '../models/data_for_routes.dart';
 import '../models/cinema.dart';
 
 class AddCinema extends StatelessWidget {
@@ -12,10 +12,11 @@ class AddCinema extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RoutesData routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
+    RoutesData routesData =
+        ModalRoute.of(context)?.settings.arguments as RoutesData;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Create cinema"),
+          title: const Text("Добавить кинотеатр"),
           centerTitle: true,
         ),
         body: Form(
@@ -27,43 +28,62 @@ class AddCinema extends StatelessWidget {
                   // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                   TextFormField(
                     onChanged: (String value) => {cinema.name = value},
-                    decoration:
-                        const InputDecoration(labelText: "Cinema name"),
+                    decoration: const InputDecoration(labelText: "Название"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter cinema name';
+                        return 'Введите название кинотеатра';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     onChanged: (String value) => {cinema.cityName = value},
-                    decoration: const InputDecoration(labelText: "City name"),
+                    decoration: const InputDecoration(labelText: "Город"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter city name';
+                        return 'Введите название города';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     onChanged: (String value) => {cinema.address = value},
-                    decoration: const InputDecoration(labelText: "Address"),
+                    decoration: const InputDecoration(labelText: "Адрес"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter address of cinema';
+                        return 'Введите адрес кинотеатра';
                       }
                       return null;
                     },
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () async {
-                      routesData.cinema = (await createCinema(
-                          cinema.name, cinema.cityName, cinema.address))!;
-                      Navigator.pushReplacementNamed(context, '/list_halls',
-                          arguments: routesData);
+                      if (cinema.name != "" &&
+                          cinema.cityName != "" &&
+                          cinema.address != "") {
+                        routesData.cinema = (await createCinema(
+                            cinema.name, cinema.cityName, cinema.address))!;
+                        Navigator.pushReplacementNamed(context, '/list_halls',
+                            arguments: routesData);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: const Text("Стоп, стоп..."),
+                                  content: const Text("Заполните все поля!"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Понял'),
+                                    )
+                                  ],
+                                ));
+                      }
                     },
-                    child: const Text("ADD HALLS->"),
+                    child: const Text("ДОБАВИТЬ ЗАЛЫ"),
                   ),
                 ])));
   }

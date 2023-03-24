@@ -1,17 +1,20 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
+import '../models/actor.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cities';
+String baseUrl = 'https://10.0.2.2:7099/actors';
 
-Future<List<String>?> getCities() async {
+Future<List<Actor>?> getActors() async {
   try {
-    List<String> citiesNames = [];
+    List<Actor> actors = [];
     Response response = await Dio().get(baseUrl);
-    for (var city in response.data) {
-      citiesNames.add(city);
-    }
     print(response.data.toString());
-    return citiesNames;
+    if (response.data != null) {
+      for(var film in response.data) {
+        actors.add(Actor.fromJson(film));
+      }
+    }
+    return actors;
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

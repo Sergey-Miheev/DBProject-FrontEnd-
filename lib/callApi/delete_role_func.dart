@@ -1,17 +1,15 @@
 import 'dart:core';
+import '../models/role.dart';
 import 'package:dio/dio.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cities';
+String baseUrl = 'https://10.0.2.2:7099/role';
 
-Future<List<String>?> getCities() async {
+Future<Role?> deleteRole(
+    int idRole) async {
   try {
-    List<String> citiesNames = [];
-    Response response = await Dio().get(baseUrl);
-    for (var city in response.data) {
-      citiesNames.add(city);
-    }
+    Response response = await Dio().delete('$baseUrl/$idRole');
     print(response.data.toString());
-    return citiesNames;
+    return Role.fromJson(response.data);
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

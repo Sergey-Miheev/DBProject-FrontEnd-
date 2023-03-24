@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/place.dart';
+import '../models/place.dart';
 import '../callApi/create_place.dart';
 import '../callApi/placeExistenceCheck.dart';
 import '../models/data_for_routes.dart';
@@ -18,7 +18,7 @@ class AddPlace extends StatelessWidget {
     place?.idHall = routesData.hall.idHall;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Create place"),
+          title: const Text("Добавить место"),
           centerTitle: true,
         ),
         body: Form(
@@ -34,10 +34,10 @@ class AddPlace extends StatelessWidget {
                           place!.row = int.parse(value);
                         }
                     },
-                    decoration: const InputDecoration(labelText: "Row number"),
+                    decoration: const InputDecoration(labelText: "Номер ряда"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter row number';
+                        return 'Введите номер ряда';
                       }
                       return null;
                     },
@@ -48,40 +48,60 @@ class AddPlace extends StatelessWidget {
                         place!.seatNumber = int.parse(value);
                       }
                     },
-                    decoration: const InputDecoration(labelText: "Seat number"),
+                    decoration: const InputDecoration(labelText: "Номер места"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter seat number';
+                        return 'Введите номер места';
                       }
                       return null;
                     },
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () async {
-                      Place? potentiallyPlace =
-                          await placeExistenceCheck(place!.idHall,place!.row,place!.seatNumber);
-                      if (potentiallyPlace == null) {
-                        routesData.place = (await createPlace(
-                            place!.idHall, place!.row, place!.seatNumber))!;
-                        Navigator.pushReplacementNamed(context, '/list_places',
-                            arguments: routesData);
-                      } else {
+                      if (place!.row != 0 && place!.seatNumber != 0) {
+                        Place? potentiallyPlace =
+                        await placeExistenceCheck(place!.idHall,place!.row,place!.seatNumber);
+                        if (potentiallyPlace == null) {
+                          routesData.place = (await createPlace(
+                              place!.idHall, place!.row, place!.seatNumber))!;
+                          Navigator.pushReplacementNamed(context, '/list_places',
+                              arguments: routesData);
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Данное место уже занято!"),
+                                content: const Text(
+                                    "Введите, пожалуйста, данные незанятых мест."),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Хорошо'),
+                                  )
+                                ],
+                              ));
+                        }
+                      }
+                      else {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
-                                  title: const Text("Данное место уже занято!"),
-                                  content: const Text(
-                                      "Введите, пожалуйста, данные незанятых мест."),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Хорошо'),
-                                    )
-                                  ],
-                                ));
+                              title: const Text("Стоп, стоп..."),
+                              content: const Text(
+                                  "Заполните, пожалуйста, все поля!"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Хорошо'),
+                                )
+                              ],
+                            ));
                       }
                     },
-                    child: const Text("FINISH"),
+                    child: const Text("ГОТОВО"),
                   ),
                 ])));
   }

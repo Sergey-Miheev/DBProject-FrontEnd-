@@ -1,6 +1,6 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
-import 'package:place_booking/models/placeInfo.dart';
+import '../models/placeInfo.dart';
 
 String baseUrl = 'https://10.0.2.2:7099/seatNums';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/user_data_for_routes.dart';
+import '../models/user_data_for_routes.dart';
 import '../callApi/get_sessions_of_cinema.dart';
 import '../models/cinema.dart';
 import '../models/film.dart';

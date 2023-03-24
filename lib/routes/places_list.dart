@@ -4,6 +4,7 @@ import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
 import '../models/hall.dart';
 import '../models/place.dart';
+import '../models/session_info.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({required this.place, required this.routesData, Key? key})
@@ -24,9 +25,9 @@ class PlaceCard extends StatelessWidget {
             bookings: place.bookings);
         Navigator.pushNamed(context, "/edit_place", arguments: routesData);
       },
-      title: Text("Row: ${place.row.toString()}",
+      title: Text("Ряд: ${place.row.toString()}",
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Seat: ${place.seatNumber}",
+      subtitle: Text("Место: ${place.seatNumber}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -53,7 +54,15 @@ class _PlacesListState extends State<PlacesList> {
           capacity: 0,
           places: [],
           sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []),
+      SessionInfo(
+          idSession: 0,
+          idCinema: 0,
+          idHall: 0,
+          filmName: "",
+          hallNumber: 0,
+          hallType: 0,
+          dateTime: DateTime.now()));
 
   void getPlaces() async {
     List<Place>? response = await getPlacesOfHall(routesData.hall.idHall);
@@ -81,7 +90,7 @@ class _PlacesListState extends State<PlacesList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Places list-"),
+          title: const Text("Список мест"),
           centerTitle: true,
         ),
         body: ListView.separated(

@@ -1,14 +1,15 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:place_booking/models/place.dart';
-import 'package:place_booking/models/session.dart';
-import 'package:place_booking/models/user_data_for_routes.dart';
+import '../models/place.dart';
+import '../models/session.dart';
+import '../models/user_data_for_routes.dart';
 import '../callApi/getCities.dart';
 import '../models/account.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
 import '../models/film.dart';
 import '../models/hall.dart';
+import '../models/session_info.dart';
 
 class SelectCity extends StatefulWidget {
   const SelectCity({Key? key}) : super(key: key);
@@ -34,7 +35,15 @@ class _SelectCityState extends State<SelectCity> {
           capacity: 0,
           places: [],
           sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []),
+      SessionInfo(
+          idSession: 0,
+          idCinema: 0,
+          idHall: 0,
+          filmName: "",
+          hallNumber: 0,
+          hallType: 0,
+          dateTime: DateTime.now()));
 
   UserRoutesData userRoutesData = UserRoutesData(
       "",
@@ -144,6 +153,7 @@ class _SelectCityState extends State<SelectCity> {
             onPressed: () {
               userRoutesData.account =
                   ModalRoute.of(context)?.settings.arguments as Account;
+              print(userRoutesData.account!.role);
               if (userRoutesData.account!.role == 0) {
                 Navigator.pushNamed(context, '/user_list_cinemas',
                     arguments: userRoutesData);

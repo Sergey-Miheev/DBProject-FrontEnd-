@@ -4,16 +4,35 @@ import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
 import '../models/hall.dart';
 import '../models/place.dart';
+import '../models/session_info.dart';
 
 class HallCard extends StatelessWidget {
-  const HallCard({required this.hall, required this.routesData, Key? key})
+  HallCard({required this.hall, required this.routesData, Key? key})
       : super(key: key);
 
   final RoutesData routesData;
   final Hall hall;
+  late String hallType = "";
 
   @override
   Widget build(BuildContext context) {
+    switch (hall.type) {
+      case(0):
+        hallType = "2D";
+        break;
+      case(1):
+        hallType = "3D";
+        break;
+      case(2):
+        hallType = "iMax 2D";
+        break;
+      case(3):
+        hallType = "iMax 3D";
+        break;
+      default:
+        hallType = "?";
+        break;
+    }
     return ListTile(
       onTap: () {
         routesData.hall = Hall(
@@ -26,11 +45,11 @@ class HallCard extends StatelessWidget {
             sessions: hall.sessions);
         Navigator.pushNamed(context, "/edit_hall", arguments: routesData);
       },
-      title: Text("Number: ${hall.number.toString()}",
+      title: Text("Номер: ${hall.number.toString()}",
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Capacity: ${hall.capacity}",
+      subtitle: Text("Вместимость: ${hall.capacity}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
-      trailing: Text("Type: ${hall.type.toString()}",
+      trailing: Text("Тип: $hallType",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -57,7 +76,16 @@ class _HallsListState extends State<HallsList> {
           capacity: 0,
           places: [],
           sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []),
+      SessionInfo(
+          idSession: 0,
+          idCinema: 0,
+          idHall: 0,
+          filmName: "",
+          hallNumber: 0,
+          hallType: 0,
+          dateTime: DateTime.now())
+    );
 
   void getHalls() async {
     List<Hall>? response = await getHallsOfCinema(routesData.cinema.idCinema);
@@ -85,7 +113,7 @@ class _HallsListState extends State<HallsList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Halls list-"),
+          title: const Text("Список залов"),
           centerTitle: true,
         ),
         body: ListView.separated(

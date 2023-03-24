@@ -1,5 +1,5 @@
-import 'package:place_booking/models/session.dart';
-import 'package:place_booking/models/session_info.dart';
+import 'session.dart';
+import 'session_info.dart';
 import 'account.dart';
 import 'cinema.dart';
 import 'film.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/callApi/get_cinemas_of_city.dart';
-import 'package:place_booking/models/user_data_for_routes.dart';
+import '../callApi/get_cinemas_of_city.dart';
+import '../models/user_data_for_routes.dart';
 import '../models/cinema.dart';
 import '../models/film.dart';
 import '../models/session.dart';
@@ -82,7 +82,7 @@ class _UserCinemaListState extends State<UserCinemaList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Кинотеатры"),
+          title: const Text("Выберите кинотеатр"),
           centerTitle: true,
         ),
         body: ListView.separated(

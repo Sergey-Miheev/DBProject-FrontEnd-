@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 Film filmFromJson(String str) => Film.fromJson(json.decode(str));
 
-String accountToJson(Film data) => json.encode(data.toJson());
+String filmToJson(Film data) => json.encode(data.toJson());
 
 @JsonSerializable()
 class Film {

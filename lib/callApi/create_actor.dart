@@ -1,19 +1,17 @@
 import 'dart:core';
-import '../models/cinema.dart';
+import '../models/actor.dart';
 import 'package:dio/dio.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cinema';
+String baseUrl = 'https://10.0.2.2:7099/actor';
 
-Future<Cinema?> createCinema(
-    String name, String cityName, String address) async {
+Future<Actor?> createActor(String name) async
+{
   try {
     Response response = await Dio().post(baseUrl, data: {
       'name': name,
-      'cityName': cityName,
-      'address': address,
     });
     print(response.data.toString());
-    return Cinema.fromJson(response.data);
+    return Actor.fromJson(response.data);
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

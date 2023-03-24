@@ -11,7 +11,7 @@ class AddHall extends StatelessWidget {
       idCinema: 0,
       number: 0,
       capacity: 0,
-      type: 0,
+      type: -1,
       places: [],
       sessions: []);
   bool duplicate = false;
@@ -23,7 +23,7 @@ class AddHall extends StatelessWidget {
     hall!.idCinema = routesData.cinema.idCinema;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Create hall"),
+          title: const Text("Добавить зал"),
           centerTitle: true,
         ),
         body: Form(
@@ -36,13 +36,13 @@ class AddHall extends StatelessWidget {
                   TextFormField(
                     onChanged: (value) {
                       if (value.isNotEmpty) {
-                        hall!.number = int.parse(value);
+                        routesData.hall.number = int.parse(value);
                       }
                     },
-                    decoration: const InputDecoration(labelText: "Hall number"),
+                    decoration: const InputDecoration(labelText: "Номер"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter hall number';
+                        return 'Введите номер зала';
                       }
                       return null;
                     },
@@ -50,13 +50,13 @@ class AddHall extends StatelessWidget {
                   TextFormField(
                     onChanged: (value) {
                       if (value.isNotEmpty) {
-                        hall!.type = int.parse(value);
+                        routesData.hall.type = int.parse(value);
                       }
                     },
-                    decoration: const InputDecoration(labelText: "Hall type"),
+                    decoration: const InputDecoration(labelText: "Тип"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter hall type';
+                        return 'Введите тип зала';
                       }
                       return null;
                     },
@@ -64,27 +64,42 @@ class AddHall extends StatelessWidget {
                   TextFormField(
                     onChanged: (value) {
                       if (value.isNotEmpty) {
-                        hall!.capacity = int.parse(value);
+                        routesData.hall.capacity = int.parse(value);
                       }
                     },
-                    decoration:
-                        const InputDecoration(labelText: "Hall capacity"),
+                    decoration: const InputDecoration(labelText: "Вместимость"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Enter hall capacity';
+                        return 'Введите вместимость зала';
                       }
                       return null;
                     },
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   ElevatedButton(
                     onPressed: () async {
-
-                      routesData.hall = (await createHall(hall!.idCinema,
-                          hall!.number, hall!.type, hall!.capacity))!;
-                      Navigator.pushReplacementNamed(context, '/list_places',
-                          arguments: routesData);
+                      if (hall!.idCinema != 0 && hall!.number != 0 && !([0,1,2].contains(hall!.type)) && hall!.capacity != 0) {
+                        routesData.hall = (await createHall(hall!.idCinema, hall!.number, hall!.type, hall!.capacity))!;
+                        Navigator.pushReplacementNamed(context, '/list_places',
+                            arguments: routesData);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Стоп, стоп..."),
+                              content: const Text("Заполните все поля!"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Понял'),
+                                )
+                              ],
+                            ));
+                      }
                     },
-                    child: const Text("ADD PLACES->"),
+                    child: const Text("ДОБАВИТЬ МЕСТА"),
                   ),
                 ])));
   }

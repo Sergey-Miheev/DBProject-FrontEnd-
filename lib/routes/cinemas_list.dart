@@ -1,7 +1,8 @@
+import '../models/session_info.dart';
 import 'package:flutter/material.dart';
-import 'package:place_booking/callApi/get_cinemas_of_city.dart';
-import 'package:place_booking/models/account.dart';
-import 'package:place_booking/models/data_for_routes.dart';
+import '../callApi/get_cinemas_of_city.dart';
+import '../models/account.dart';
+import '../models/data_for_routes.dart';
 import '../models/cinema.dart';
 import '../models/hall.dart';
 import '../models/place.dart';
@@ -28,7 +29,7 @@ class CinemaCard extends StatelessWidget {
       },
       title: Text(cinema.name,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Address: ${cinema.address}",
+      subtitle: Text("Адрес: ${cinema.address}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -55,7 +56,15 @@ class _CinemaListState extends State<CinemaList> {
           capacity: 0,
           places: [],
           sessions: []),
-      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []));
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []),
+      SessionInfo(
+          idSession: 0,
+          idCinema: 0,
+          idHall: 0,
+          filmName: "",
+          hallNumber: 0,
+          hallType: 0,
+          dateTime: DateTime.now()));
 
   void getCinemas() async {
     List<Cinema>? response = await getCinemasOfCity(routesData.cityName);
@@ -83,7 +92,7 @@ class _CinemaListState extends State<CinemaList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("-Edit cinemas page-"),
+          title: const Text("Список кинотеатров"),
           centerTitle: true,
         ),
         body: ListView.separated(
@@ -110,9 +119,15 @@ class _CinemaListState extends State<CinemaList> {
         ),
       ),
       onWillPop: () async {
-        Account? acc = Account(idAccount: 0, name: "", email: "", password: "", dateOfBirthday: DateTime.now(), role: 1, bookings: []);
-        Navigator.pushReplacementNamed(context, '/cities',
-            arguments: acc);
+        Account? acc = Account(
+            idAccount: 0,
+            name: "",
+            email: "",
+            password: "",
+            dateOfBirthday: DateTime.now(),
+            role: 1,
+            bookings: []);
+        Navigator.pushReplacementNamed(context, '/cities', arguments: acc);
         return Future.value(true);
       },
     );

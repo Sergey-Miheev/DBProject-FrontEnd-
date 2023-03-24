@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:place_booking/callApi/delete_cinema.dart';
-import 'package:place_booking/models/data_for_routes.dart';
+import '../callApi/delete_cinema.dart';
+import '../models/data_for_routes.dart';
 import '../callApi/edit_cinema_func.dart';
 
 class EditCinema extends StatelessWidget {
@@ -16,7 +16,7 @@ class EditCinema extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit cinema data"),
+          title: const Text("Редактирование кинотеатра"),
         ),
         body: Form(
             key: _formKey,
@@ -27,11 +27,11 @@ class EditCinema extends StatelessWidget {
                 // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
                 TextFormField(
                   onChanged: (String value) => {routesData.cinema.name = value},
-                  decoration: const InputDecoration(labelText: "Cinema name"),
+                  decoration: const InputDecoration(labelText: "Кинотеатр"),
                   initialValue: routesData.cinema.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter cinema name';
+                      return 'Введите название кинотеатра';
                     }
                     return null;
                   },
@@ -39,11 +39,11 @@ class EditCinema extends StatelessWidget {
                 TextFormField(
                   onChanged: (String value) =>
                       {routesData.cinema.cityName = value},
-                  decoration: const InputDecoration(labelText: "City name"),
+                  decoration: const InputDecoration(labelText: "Город"),
                   initialValue: routesData.cinema.cityName,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter city name';
+                      return 'Введите название города';
                     }
                     return null;
                   },
@@ -51,14 +51,17 @@ class EditCinema extends StatelessWidget {
                 TextFormField(
                   onChanged: (String value) =>
                       {routesData.cinema.address = value},
-                  decoration: const InputDecoration(labelText: "Address"),
+                  decoration: const InputDecoration(labelText: "Адрес"),
                   initialValue: routesData.cinema.address,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter address of cinema';
+                      return 'Введите адрес кинотеатра';
                     }
                     return null;
                   },
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 OverflowBar(
                   alignment: MainAxisAlignment.end,
@@ -69,7 +72,7 @@ class EditCinema extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/list_cinemas',
                             arguments: routesData);
                       },
-                      child: const Text("DELETE"),
+                      child: const Text("УДАЛИТЬ"),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -78,15 +81,39 @@ class EditCinema extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/list_halls',
                             arguments: routesData);
                       },
-                      child: const Text("EDIT HALLS->"),
+                      child: const Text("ИЗМЕНИТЬ ЗАЛЫ"),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        editCinema(routesData.cinema);
-                        Navigator.pushReplacementNamed(context, '/list_cinemas',
+                        if (routesData.cinema.name != "" &&
+                            routesData.cinema.cityName != "" &&
+                            routesData.cinema.address != "") {
+                          editCinema(routesData.cinema);
+                          Navigator.pushReplacementNamed(context, '/list_cinemas',
+                              arguments: routesData);
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Стоп, стоп..."),
+                                content: const Text("Заполните все поля!"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Понял'),
+                                  )
+                                ],
+                              ));
+                        }
+                      },
+                      child: const Text("СОХРАНИТЬ"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/admin_list_sessions',
                             arguments: routesData);
                       },
-                      child: const Text("SAVE"),
+                      child: const Text("ИЗМЕНИТЬ СЕАНСЫ"),
                     ),
                   ],
                 )

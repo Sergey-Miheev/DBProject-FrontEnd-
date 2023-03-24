@@ -1,17 +1,15 @@
 import 'dart:core';
+import '../models/actor.dart';
 import 'package:dio/dio.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cities';
+String baseUrl = 'https://10.0.2.2:7099/actor';
 
-Future<List<String>?> getCities() async {
+Future<Actor?> deleteActor(
+    int idActor) async {
   try {
-    List<String> citiesNames = [];
-    Response response = await Dio().get(baseUrl);
-    for (var city in response.data) {
-      citiesNames.add(city);
-    }
+    Response response = await Dio().delete('$baseUrl/$idActor');
     print(response.data.toString());
-    return citiesNames;
+    return Actor.fromJson(response.data);
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

@@ -1,20 +1,20 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
-import '../models/cinema.dart';
+import '../models/role.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/editCinema';
+String baseUrl = 'https://10.0.2.2:7099/editRole';
 
-Future<Cinema?> editCinema(Cinema? cinema) async {
+Future<Role?> editRole(Role role) async {
   try {
-    if (cinema != null) {
+    if (role != null) {
       Response response = await Dio().put(baseUrl, data: {
-        'idCinema': cinema.idCinema,
-        'name': cinema.name,
-        'cityName': cinema.cityName,
-        'address': cinema.address,
+        "idRole": role.idRole,
+        "idActor": role.idActor,
+        "idFilm": role.idFilm,
+        "namePersonage": role.namePersonage,
       });
       print(response.data.toString());
-      return Cinema.fromJson(response.data);
+      return Role.fromJson(response.data);
     }
     return null;
   } on DioError catch (e) {

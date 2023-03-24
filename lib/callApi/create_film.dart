@@ -1,20 +1,20 @@
 import 'dart:core';
-import '../models/hall.dart';
+import '../models/film.dart';
 import 'package:dio/dio.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/hall';
+String baseUrl = 'https://10.0.2.2:7099/film';
 
-Future<Hall?> createHall(
-    int idCinema, int number, int type, int capacity) async {
+Future<Film?> createFilm(String name, String duration, int ageRating, String description) async
+{
   try {
     Response response = await Dio().post(baseUrl, data: {
-      'idCinema': idCinema,
-      'number': number,
-      'type': type,
-      'capacity': capacity,
+      'name': name,
+      'duration': duration,
+      'ageRating': ageRating,
+      'description': description,
     });
     print(response.data.toString());
-    return Hall.fromJson(response.data);
+    return Film.fromJson(response.data);
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

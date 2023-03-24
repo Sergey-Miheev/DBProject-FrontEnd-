@@ -25,27 +25,3 @@ Future<List<SessionInfo>?> getSessionsOfCinema(int idCinema) async {
     return null;
   }
 }
-
-/*
-Future<List<Session>?> getSessionsOfCinema(int idFilm) async {
-  try {
-    List<Session> sessions = [];
-    Response response = await Dio().get('$baseUrl/$idFilm');
-    print(response.data.toString());
-    if (response.data != null) {
-      for(var session in response.data) {
-        sessions.add(Session.fromJson(session));
-      }
-    }
-    return sessions;
-  } on DioError catch (e) {
-    if (e.response != null) {
-      print(e.response!.data);
-    } else {
-      print(e.requestOptions);
-      print(e.message);
-    }
-    return null;
-  }
-}
- */

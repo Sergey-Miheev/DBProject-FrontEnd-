@@ -15,7 +15,7 @@ class EditHall extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit hall data"),
+          title: const Text("Редактирование зала"),
         ),
         body: Form(
             key: _formKey,
@@ -28,13 +28,15 @@ class EditHall extends StatelessWidget {
                   onChanged: (value) {
                     if (value.isNotEmpty) {
                       routesData.hall.number = int.parse(value);
+                    } else {
+                      routesData.hall.number = 0;
                     }
                   },
-                  decoration: const InputDecoration(labelText: "Hall number"),
+                  decoration: const InputDecoration(labelText: "Номер"),
                   initialValue: routesData.hall.number.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter hall number';
+                      return 'Введите номер зала';
                     }
                     return null;
                   },
@@ -43,13 +45,15 @@ class EditHall extends StatelessWidget {
                   onChanged: (value) {
                     if (value.isNotEmpty) {
                       routesData.hall.type = int.parse(value);
+                    } else {
+                      routesData.hall.type = -1;
                     }
                   },
-                  decoration: const InputDecoration(labelText: "Hall type"),
+                  decoration: const InputDecoration(labelText: "Тип"),
                   initialValue: routesData.hall.type.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter hall type';
+                      return 'Введите тип зала';
                     }
                     return null;
                   },
@@ -58,19 +62,21 @@ class EditHall extends StatelessWidget {
                   onChanged: (value) {
                     if (value.isNotEmpty) {
                       routesData.hall.capacity = int.parse(value);
+                    } else {
+                      routesData.hall.capacity = 0;
                     }
                   },
-                  decoration: const InputDecoration(labelText: "Hall capacity"),
+                  decoration: const InputDecoration(labelText: "Вместимость"),
                   initialValue: routesData.hall.capacity.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter hall capacity';
+                      return 'Введите вместимость зала';
                     }
                     return null;
                   },
                 ),
                 OverflowBar(
-                  alignment: MainAxisAlignment.end,
+                  alignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {
@@ -78,7 +84,7 @@ class EditHall extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/list_halls',
                             arguments: routesData);
                       },
-                      child: const Text("DELETE"),
+                      child: const Text("УДАЛИТЬ"),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -87,15 +93,33 @@ class EditHall extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/list_places',
                             arguments: routesData);
                       },
-                      child: const Text("EDIT PLACES->"),
+                      child: const Text("РЕДАКТИРОВАТЬ МЕСТА"),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        editHall(routesData.hall);
-                        Navigator.pushReplacementNamed(context, '/list_halls',
-                            arguments: routesData);
+                        if (routesData.hall.idCinema != 0 &&
+                            routesData.hall.number != 0 &&
+                            routesData.hall.type != -1 &&
+                            routesData.hall.capacity != 0) {
+                          editHall(routesData.hall);
+                          Navigator.pushReplacementNamed(context, '/list_halls',
+                              arguments: routesData);
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    title: const Text("Стоп, стоп..."),
+                                    content: const Text("Заполните все поля!"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Понял'),
+                                      )
+                                    ],
+                                  ));
+                        }
                       },
-                      child: const Text("SAVE"),
+                      child: const Text("СОХРАНИТЬ"),
                     ),
                   ],
                 )
