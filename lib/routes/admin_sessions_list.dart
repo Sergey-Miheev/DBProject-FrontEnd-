@@ -43,7 +43,7 @@ class SessionCard extends StatelessWidget {
         children: <Widget>[
           Text("Зал: ${sessionInfo.hallNumber}",
               style: const TextStyle(fontSize: 16, color: Colors.orange)),
-          Text("Тип зала: ${sessionInfo.hallType}",
+          Text("Тип зала: $hallType",
               style: const TextStyle(fontSize: 16, color: Colors.orange)),
           Text("Дата: ${sessionInfo.dateTime.day.toString().padLeft(2, '0')}"
               ".${sessionInfo.dateTime.month.toString().padLeft(2, '0')}",
@@ -113,15 +113,15 @@ class _AdminSessionListState extends State<AdminSessionList> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   FloatingActionButton(
-                    child: Icon(
-                        Icons.add
-                    ),
                     onPressed: () =>
                         Navigator.pushReplacementNamed(context, '/add_session',
                             arguments: routesData),
                     heroTag: null,
+                    child: const Icon(
+                        Icons.add
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                     width: 20,
                   ),

@@ -85,8 +85,8 @@ class _EditSessionState extends State<EditSession> {
 
   @override
   void initState() {
-    _cnt1 = SingleValueDropDownController(data: const DropDownValueModel(name: "name4", value: "f"));
-    _cnt2 = SingleValueDropDownController();
+    //_cnt1 = SingleValueDropDownController(data: const DropDownValueModel(name: "name4", value: "f"));
+    //_cnt2 = SingleValueDropDownController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       wrapFilms();
       wrapHalls();
@@ -105,10 +105,11 @@ class _EditSessionState extends State<EditSession> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     RoutesData routesData = ModalRoute.of(context)?.settings.arguments as RoutesData;
+    _cnt1 = SingleValueDropDownController(data: DropDownValueModel(name: routesData.sessionInfo.filmName, value: routesData.sessionInfo.idFilm));
+    _cnt2 = SingleValueDropDownController(data: DropDownValueModel(name: routesData.sessionInfo.hallNumber.toString(), value: routesData.sessionInfo.idHall));
     final year = dateTime.year.toString().padLeft(4, '0');
     final month = dateTime.month.toString().padLeft(2, '0');
     final day = dateTime.day.toString().padLeft(2, '0');
@@ -154,7 +155,7 @@ class _EditSessionState extends State<EditSession> {
                       SingleChildScrollView(
                         child: DropDownTextField(
                           readOnly: false,
-                          controller: _cnt1,
+                          controller: _cnt2,
                           clearOption: true,
                           keyboardType: TextInputType.text,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -172,6 +173,9 @@ class _EditSessionState extends State<EditSession> {
                             if (value != "") {session.idHall = value.value}
                           },
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       ElevatedButton(
                           onPressed: pickDateTime,
