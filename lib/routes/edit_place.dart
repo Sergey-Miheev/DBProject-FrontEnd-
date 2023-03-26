@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../callApi/delete_place_func.dart';
 import '../callApi/edit_place_func.dart';
-import '../callApi/placeExistenceCheck.dart';
+import '../callApi/place_existence_check.dart';
 import '../models/data_for_routes.dart';
 import '../models/place.dart';
 

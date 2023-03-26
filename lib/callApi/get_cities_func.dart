@@ -1,12 +1,13 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cities';
+String refUrl = 'cities';
 
 Future<List<String>?> getCities() async {
   try {
     List<String> citiesNames = [];
-    Response response = await Dio().get(baseUrl);
+    Response response = await Dio().get('$baseUrl$refUrl');
     for (var city in response.data) {
       citiesNames.add(city);
     }

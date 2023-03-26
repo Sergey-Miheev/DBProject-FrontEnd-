@@ -48,7 +48,7 @@ class _RoleCardState extends State<RoleCard> {
         },
       title: Text(widget.role.namePersonage,
           style: const TextStyle(fontSize: 22, color: Colors.black)),
-      subtitle: Text("Actor: ${actor?.name}",
+      subtitle: Text("Актёр: ${actor?.name}",
           style: const TextStyle(fontSize: 16, color: Colors.orange)),
     );
   }
@@ -98,7 +98,7 @@ class _AdminRoleListState extends State<AdminRoleList> {
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
-              title: Text("List Roles in Film:\n${film.name}"),
+              title: Text("Список ролей фильма\n\"${film.name}\""),
               centerTitle: true,
             ),
             body: ListView.separated(

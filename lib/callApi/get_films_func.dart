@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/film.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/films';
+String refUrl = 'films';
 
 Future<List<Film>?> getFilms() async {
   try {
     List<Film> films = [];
-    Response response = await Dio().get(baseUrl);
+    Response response = await Dio().get('$baseUrl$refUrl');
     print(response.data.toString());
     if (response.data != null) {
       for(var film in response.data) {

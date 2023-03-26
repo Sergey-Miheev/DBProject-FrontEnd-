@@ -1,8 +1,9 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/session.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/editSession';
+String refUrl = 'editSession';
 
 Future<Session?> editSession(Session? session) async {
   try {
@@ -10,7 +11,7 @@ Future<Session?> editSession(Session? session) async {
     dateTime = "${dateTime.substring(0, 10)}T${dateTime.substring(11, 19)}";
     print(dateTime);
     if (session != null) {
-      Response response = await Dio().put(baseUrl, data: {
+      Response response = await Dio().put('$baseUrl$refUrl', data: {
         'idSession': session.idSession,
         'idFilm': session.idFilm,
         'idHall': session.idHall,

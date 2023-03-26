@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import '../callApi/checkRegisteredEmail.dart';
-import '../callApi/createAccount.dart';
+import '../callApi/check_registered_email.dart';
+import '../callApi/create_account.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class SignUp extends StatelessWidget {
   String _email = "";
   String _pw = "";
   String _dateOfBirthday = "";
-  bool duplicate = false;
+  bool isDuplicate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class SignUp extends StatelessWidget {
                     decoration:
                         const InputDecoration(labelText: "Повторите пароль"),
                     onChanged: (String value) =>
-                        {(value == _pw ? duplicate = true : duplicate = false)},
+                        {(value == _pw ? isDuplicate = true : isDuplicate = false)},
                   ),
                   OverflowBar(
                     alignment: MainAxisAlignment.end,
@@ -62,7 +62,7 @@ class SignUp extends StatelessWidget {
                         onPressed: () async {
                           final bool isValid = EmailValidator.validate(_email);
                           if (isValid) {
-                            if (duplicate) {
+                            if (isDuplicate) {
                               if (await checkRegisteredEmail(_email) == null) {
                                 if (await createAccount(
                                     _name, _email, _dateOfBirthday, _pw) !=

@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/cinema.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/cinema';
+String refUrl = 'cinema';
 
 Future<List<Cinema>?> getCinemasOfCity(String cityName) async {
   try {
     List<Cinema> cinemas = [];
-    Response response = await Dio().get('$baseUrl/$cityName');
+    Response response = await Dio().get('$baseUrl$refUrl/$cityName');
     print(response.data.toString());
     if (response.data != null) {
       for(var cinema in response.data) {

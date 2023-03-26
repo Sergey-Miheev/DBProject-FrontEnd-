@@ -1,21 +1,22 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
-import '../models/actor.dart';
+import '../models/booking.dart';
 import 'constants.dart';
 
-String refUrl = 'actors';
+String refUrl = 'booking/';
 
-Future<List<Actor>?> getActors() async {
+Future<Booking?> getBookingByIdBooking(int idBooking) async {
   try {
-    List<Actor> actors = [];
-    Response response = await Dio().get('$baseUrl$refUrl');
+    Booking booking;
+    Response response = await Dio().get('$baseUrl$refUrl$idBooking');
     print(response.data.toString());
     if (response.data != null) {
-      for(var film in response.data) {
-        actors.add(Actor.fromJson(film));
-      }
+      booking = Booking.fromJson(response.data);
+      return booking;
     }
-    return actors;
+    else {
+      return null;
+    }
   } on DioError catch (e) {
     if (e.response != null) {
       print(e.response!.data);

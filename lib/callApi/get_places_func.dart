@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/place.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/places';
+String refUrl = 'places/';
 
 Future<List<Place>?> getPlacesOfHall(int idHall) async {
   try {
     List<Place> places = [];
-    Response response = await Dio().get('$baseUrl/$idHall');
+    Response response = await Dio().get('$baseUrl$refUrl$idHall');
     print(response.data.toString());
     if (response.data != null) {
       for(var hall in response.data) {

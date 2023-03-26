@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/role.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/role';
+String refUrl = 'role/';
 
 Future<List<Role>?> getRolesOfFilm(int idFilm) async {
   try {
     List<Role> roles = [];
-    Response response = await Dio().get('$baseUrl/$idFilm');
+    Response response = await Dio().get('$baseUrl$refUrl$idFilm');
     print(response.data.toString());
     if (response.data != null) {
       for(var role in response.data) {

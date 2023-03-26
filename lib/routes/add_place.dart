@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../callApi/place_existence_check.dart';
 import '../models/place.dart';
 import '../callApi/create_place.dart';
-import '../callApi/placeExistenceCheck.dart';
 import '../models/data_for_routes.dart';
 
 class AddPlace extends StatelessWidget {

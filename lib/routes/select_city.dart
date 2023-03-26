@@ -1,9 +1,9 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
+import '../callApi/get_cities_func.dart';
 import '../models/place.dart';
 import '../models/session.dart';
 import '../models/user_data_for_routes.dart';
-import '../callApi/getCities.dart';
 import '../models/account.dart';
 import '../models/cinema.dart';
 import '../models/data_for_routes.dart';
@@ -155,11 +155,11 @@ class _SelectCityState extends State<SelectCity> {
                   ModalRoute.of(context)?.settings.arguments as Account;
               print(userRoutesData.account!.role);
               if (userRoutesData.account!.role == 0) {
-                Navigator.pushNamed(context, '/user_list_cinemas',
+                Navigator.pushReplacementNamed(context, '/user_list_cinemas',
                     arguments: userRoutesData);
               } else if (userRoutesData.account!.role == 1) {
                 if (routesData.cityName != "") {
-                  Navigator.pushNamed(context, '/list_cinemas',
+                  Navigator.pushReplacementNamed(context, '/list_cinemas',
                       arguments: routesData);
                 } else {
                   showDialog(
@@ -183,7 +183,13 @@ class _SelectCityState extends State<SelectCity> {
           ),
         ),
         onWillPop: () async {
-          Navigator.pushReplacementNamed(context, '/log_in');
+          if (userRoutesData.account!.role == 0) {
+            Navigator.pushReplacementNamed(context, '/user_list_bookings',
+                arguments: userRoutesData);
+          } else  {
+            Navigator.pushReplacementNamed(context, '/log_in',
+                arguments: routesData);
+          }
           return Future.value(true);
         },
       );

@@ -46,10 +46,11 @@ class _EditRoleState extends State<EditRole> {
   @override
   Widget build(BuildContext context) {
     FilmAndRole filmAndRole = ModalRoute.of(context)?.settings.arguments as FilmAndRole;
+
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit role data"),
+          title: const Text("Редактировать роль"),
         ),
         body: Form(
             key: _formKey,
@@ -73,7 +74,6 @@ class _EditRoleState extends State<EditRole> {
                   child: Form(
                     key: formKey,
                     child: DropDownTextField(
-                      // initialValue: "name4",
                       readOnly: false,
                       controller: _cnt,
                       clearOption: true,

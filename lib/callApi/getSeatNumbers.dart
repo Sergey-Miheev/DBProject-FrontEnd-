@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/placeInfo.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/seatNums';
+String refUrl = 'seatNums/';
 
 Future<List<PlaceInfo>?> getSeatNumbers(int idHall, int rowNum) async {
   try {
     List<PlaceInfo> seatNums = [];
-    Response response = await Dio().get("$baseUrl/$idHall/$rowNum");
+    Response response = await Dio().get('$baseUrl$refUrl$idHall/$rowNum');
     print(response.data.toString());
     for (var seatNum in response.data) {
       seatNums.add(PlaceInfo.fromJson(seatNum));

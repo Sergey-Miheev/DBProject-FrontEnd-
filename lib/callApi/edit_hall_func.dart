@@ -1,14 +1,15 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/hall.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/editHall';
+String refUrl = 'editHall';
 
 Future<Hall?> editHall(
     Hall? hall) async {
   try {
     if (hall != null) {
-      Response response = await Dio().put(baseUrl, data: {
+      Response response = await Dio().put('$baseUrl$refUrl', data: {
         'idHall': hall.idHall,
         'idCinema': hall.idCinema,
         'number': hall.number,

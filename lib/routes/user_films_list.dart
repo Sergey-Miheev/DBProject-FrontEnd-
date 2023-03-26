@@ -40,23 +40,21 @@ class _FilmCardState extends State<FilmCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ListTile(
-        onTap: () {
-          widget.localRoutesData.film = widget.film;
-          Navigator.pushNamed(context, "/user_list_sessions",
-              arguments: widget.localRoutesData);
-        },
-        title: Text(widget.film.name,
-            style: const TextStyle(fontSize: 22, color: Colors.black)),
-        subtitle: Text(widget.film.description,
-            style: const TextStyle(fontSize: 16, color: Colors.orange)),
-        trailing: Text("${widget.film.ageRating.toString()}+",
-            style: const TextStyle(fontSize: 16, color: Colors.redAccent)),
-        leading: Image.network( (imgUrl != "") ? imgUrl : "https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/flutter-1024.png",
-            fit: BoxFit.contain),
-      ),
-    ]);
+    return ListTile(
+      onTap: () {
+        widget.localRoutesData.film = widget.film;
+        Navigator.pushNamed(context, "/user_list_sessions",
+            arguments: widget.localRoutesData);
+      },
+      title: Text(widget.film.name,
+          style: const TextStyle(fontSize: 22, color: Colors.black)),
+      subtitle: Text(widget.film.description,
+          style: const TextStyle(fontSize: 16, color: Colors.orange)),
+      trailing: Text("${widget.film.ageRating.toString()}+",
+          style: const TextStyle(fontSize: 16, color: Colors.redAccent)),
+      leading: Image.network( (imgUrl != "") ? imgUrl : "https://9sail.com/wp-content/uploads/2019/11/slow-load-speed-mobile-website-seo.jpg",
+          fit: BoxFit.contain),
+    );
   }
 }
 

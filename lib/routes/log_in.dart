@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import '../callApi/checkingExistenceOfAccount.dart';
+import '../callApi/checking_existence_of_account.dart';
 import '../models/account.dart';
+import '../models/user_data_for_routes.dart';
+import '../models/cinema.dart';
+import '../models/film.dart';
+import '../models/session.dart';
 
 class Authorization extends StatelessWidget {
   Authorization({Key? key}) : super(key: key);
@@ -9,6 +13,23 @@ class Authorization extends StatelessWidget {
   String _pw = "";
   Account? account;
   int role = 0;
+  UserRoutesData userRoutesData = UserRoutesData(
+      "",
+      Cinema(idCinema: 0, name: "", cityName: "", address: "", halls: []),
+      Film(
+          idFilm: 0,
+          duration: "",
+          name: "",
+          ageRating: 0,
+          description: "",
+          roles: [],
+          sessions: []),
+      Session(
+          idSession: 0,
+          idHall: 2,
+          idFilm: 1,
+          dateTime: DateTime.now(),
+          bookings: []));
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +52,7 @@ class Authorization extends StatelessWidget {
                   if (value != "") {
                     _email = value;
                   }
-                  },
+                },
               ),
               const SizedBox(
                 height: 12,
@@ -56,32 +77,38 @@ class Authorization extends StatelessWidget {
                   ElevatedButton(
                     child: const Text("ВОЙТИ"),
                     onPressed: () async {
-                      account = await checkingExistenceOfAccount(_email.trim(), _pw.trim());
+                      account = await checkingExistenceOfAccount(
+                          _email.trim(), _pw.trim());
+                      userRoutesData.account = account;
                       if ((account != null)) {
                         role = account!.role;
+                        print(role);
                         if (role == 2) {
-                          Navigator.pushReplacementNamed(context, "/admin_list_films");
-                        }
-                        else {
                           Navigator.pushReplacementNamed(
-                              context, "/cities", arguments: account);
+                              context, "/admin_list_films");
+                        } else if (role == 0) {
+                          Navigator.pushReplacementNamed(
+                              context, "/user_list_bookings",
+                              arguments: userRoutesData);
+                        } else {
+                          Navigator.pushReplacementNamed(context, "/cities",
+                              arguments: account);
                         }
-                      }
-                      else {
+                      } else {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Слышь тебе сюда нельзя"),
-                              content:
-                              const Text("Заходи не бойся, уходи не плачь"),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'sign_in'),
-                                  child: const Text('Понял'),
-                                )
-                              ],
-                            ));
+                                  title: const Text("Слышь тебе сюда нельзя"),
+                                  content: const Text(
+                                      "Заходи не бойся, уходи не плачь"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'sign_in'),
+                                      child: const Text('Понял'),
+                                    )
+                                  ],
+                                ));
                       }
                     },
                   ),

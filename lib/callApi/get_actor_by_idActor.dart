@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:dio/dio.dart';
 import '../models/actor.dart';
+import 'constants.dart';
 
-String baseUrl = 'https://10.0.2.2:7099/actor';
+String refUrl = 'actor/';
 
 Future<Actor?> getActorByIdActor(int idActor) async {
   try {
     Actor actor;
-    Response response = await Dio().get('$baseUrl/$idActor');
+    Response response = await Dio().get('$baseUrl$refUrl$idActor');
     print(response.data.toString());
     if (response.data != null) {
       actor = Actor.fromJson(response.data);

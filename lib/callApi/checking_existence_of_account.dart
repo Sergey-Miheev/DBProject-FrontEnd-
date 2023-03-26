@@ -7,7 +7,7 @@ String baseUrl = 'https://10.0.2.2:7099/account';
 Future<Account?> checkingExistenceOfAccount(String email, String password) async {
   try {
     Response response = await Dio().get('$baseUrl/$email/$password');
-    print("sucess");
+    print("success");
     return Account.fromJson(response.data);
   } on DioError catch (e) {
     if (e.response != null) {

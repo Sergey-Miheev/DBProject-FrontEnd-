@@ -96,7 +96,7 @@ class _UserSessionsListState extends State<UserSessionsList> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Сеансы на \"${routesData.film.name}\""),
+          title: Text("Сеансы фильма\n${routesData.film.name}"),
           centerTitle: true,
         ),
         body: ListView.separated(

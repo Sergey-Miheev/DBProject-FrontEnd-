@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import '../callApi/get_films_func.dart';
 import '../models/session.dart';
 import '../models/film.dart';
 import '../models/hall.dart';
 import '../callApi/create_session.dart';
 import '../callApi/get_halls.dart';
-import '../callApi/getFilms.dart';
 import '../models/data_for_routes.dart';
 
 class AddSession extends StatefulWidget {

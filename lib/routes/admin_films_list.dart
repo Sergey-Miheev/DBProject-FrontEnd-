@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../callApi/getFilms.dart';
+import '../callApi/get_films_func.dart';
 import '../models/film.dart';
 
 class FilmCard extends StatelessWidget {
