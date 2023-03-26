@@ -1,3 +1,4 @@
+import '../callApi/delete_booking_func.dart';
 import '../models/account.dart';
 import '../models/booking.dart';
 import '../models/booking_info.dart';
@@ -31,17 +32,15 @@ class _EditBookingState extends State<EditBooking> {
   final List<DropDownValueModel> _rowsNumbersList = [];
   List<DropDownValueModel> seatNumbersList = [];
   Place place =
-  Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []);
-  Booking? booking =
-  Booking(
+      Place(idPlace: 0, idHall: 0, row: 0, seatNumber: 0, bookings: []);
+  Booking? booking = Booking(
       idBooking: 0,
       idSession: 0,
       idPlace: 0,
       idAccount: 0,
       bookingCode: "",
       dateTime: DateTime.now());
-  Account account =
-  Account(
+  Account account = Account(
       idAccount: 0,
       name: "",
       email: "",
@@ -68,13 +67,15 @@ class _EditBookingState extends State<EditBooking> {
           bookings: []));
 
   Future<Booking?> getBooking() async {
-    BookingInfo bookingInfo = ModalRoute.of(context)?.settings.arguments as BookingInfo;
+    BookingInfo bookingInfo =
+        ModalRoute.of(context)?.settings.arguments as BookingInfo;
     booking = await getBookingByIdBooking(bookingInfo.idBooking);
     return booking;
   }
 
   void getRows() async {
-    BookingInfo bookingInfo = ModalRoute.of(context)?.settings.arguments as BookingInfo;
+    BookingInfo bookingInfo =
+        ModalRoute.of(context)?.settings.arguments as BookingInfo;
     _rowsNumbersList.clear();
     List<int>? response = await getRowsData(bookingInfo.idHall);
     if (response != null) {
@@ -87,12 +88,13 @@ class _EditBookingState extends State<EditBooking> {
   }
 
   void getSeatNums() async {
-    BookingInfo bookingInfo = ModalRoute.of(context)?.settings.arguments as BookingInfo;
+    BookingInfo bookingInfo =
+        ModalRoute.of(context)?.settings.arguments as BookingInfo;
     seatNumbersList.clear();
     List<PlaceInfo>? seatNums =
-    await getSeatNumbers(bookingInfo.idHall, place.row);
-    List<int>? reservedSeatsIds = await getReservedSeatsId(
-        booking!.idSession, bookingInfo.idHall);
+        await getSeatNumbers(bookingInfo.idHall, place.row);
+    List<int>? reservedSeatsIds =
+        await getReservedSeatsId(booking!.idSession, bookingInfo.idHall);
     if (seatNums != null && reservedSeatsIds != null) {
       for (var seat in seatNums) {
         if (!reservedSeatsIds.contains(seat.idPlace)) {
@@ -114,13 +116,16 @@ class _EditBookingState extends State<EditBooking> {
   void didChangeDependencies() {
     getRows();
     getBooking();
-    BookingInfo bookingInfo = ModalRoute.of(context)?.settings.arguments as BookingInfo;
-    _cnt1 = SingleValueDropDownController(data: DropDownValueModel(
-        name: bookingInfo.row.toString(),
-        value: bookingInfo.row.toString()));
-    _cnt2 = SingleValueDropDownController(data: DropDownValueModel(
-        name: bookingInfo.seatNumber.toString(),
-        value: booking!.idPlace.toString()));
+    BookingInfo bookingInfo =
+        ModalRoute.of(context)?.settings.arguments as BookingInfo;
+    _cnt1 = SingleValueDropDownController(
+        data: DropDownValueModel(
+            name: bookingInfo.row.toString(),
+            value: bookingInfo.row.toString()));
+    _cnt2 = SingleValueDropDownController(
+        data: DropDownValueModel(
+            name: bookingInfo.seatNumber.toString(),
+            value: booking!.idPlace.toString()));
     super.didChangeDependencies();
   }
 
@@ -131,10 +136,10 @@ class _EditBookingState extends State<EditBooking> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    BookingInfo bookingInfo = ModalRoute.of(context)?.settings.arguments as BookingInfo;
+    BookingInfo bookingInfo =
+        ModalRoute.of(context)?.settings.arguments as BookingInfo;
 
     return WillPopScope(
       child: Scaffold(
@@ -220,40 +225,68 @@ class _EditBookingState extends State<EditBooking> {
                       place.idPlace = int.parse(seatValue.value.toString());
                     },
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  OverflowBar(
+                    alignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          deleteBooking(booking!.idBooking);
+                          userRoutesData.account = account;
+                          userRoutesData.account!.idAccount =
+                              booking!.idAccount;
+                          Navigator.pushReplacementNamed(
+                              context, '/user_list_bookings',
+                              arguments: userRoutesData);
+                        },
+                        child: const Text("УДАЛИТЬ"),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          var generator =
+                              RandomStringGenerator(fixedLength: 20);
+                          booking!.idPlace = place.idPlace;
+                          booking!.bookingCode = generator.generate();
+                          booking!.dateTime = DateTime.now();
+                          if (place.idPlace != 0) {
+                            editBooking(booking);
+                            userRoutesData.account = account;
+                            userRoutesData.account!.idAccount =
+                                booking!.idAccount;
+                            Navigator.pushReplacementNamed(
+                                context, '/user_list_bookings',
+                                arguments: userRoutesData);
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                      title: const Text(
+                                          "Вы не выбрали ряд или место!"),
+                                      content: const Text(
+                                          "Выберите ряд и место из списка предложенных."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: const Text('Хорошо'),
+                                        )
+                                      ],
+                                    ));
+                          }
+                        },
+                        child: const Text("СОХРАНИТЬ"),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            var generator = RandomStringGenerator(fixedLength: 20);
-            booking!.idPlace = place.idPlace;
-            booking!.bookingCode = generator.generate();
-            booking!.dateTime = DateTime.now();
-            if (place.idPlace != 0) {
-              editBooking(booking);
-              userRoutesData.account = account;
-              userRoutesData.account!.idAccount = booking!.idAccount;
-              Navigator.pushReplacementNamed(context, '/user_list_bookings',
-                  arguments: userRoutesData);
-            } else {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text("Вы не выбрали ряд или место!"),
-                    content:
-                    const Text("Выберите ряд и место из списка предложенных."),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Хорошо'),
-                      )
-                    ],
-                  ));
-            }
-          },
-          label: const Text("Создать"),
         ),
       ),
       onWillPop: () async {
