@@ -168,6 +168,9 @@ class _AddSessionState extends State<AddSession> {
                           },
                         ),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       ElevatedButton(
                           onPressed: pickDateTime,
                           child: Text(

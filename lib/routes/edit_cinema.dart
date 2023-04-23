@@ -68,11 +68,10 @@ class EditCinema extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        deleteCinema(routesData.cinema.idCinema);
-                        Navigator.pushReplacementNamed(context, '/list_cinemas',
+                        Navigator.pushReplacementNamed(context, '/admin_list_sessions',
                             arguments: routesData);
                       },
-                      child: const Text("УДАЛИТЬ"),
+                      child: const Text("ИЗМЕНИТЬ СЕАНСЫ"),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -110,10 +109,11 @@ class EditCinema extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/admin_list_sessions',
+                        deleteCinema(routesData.cinema.idCinema);
+                        Navigator.pushReplacementNamed(context, '/list_cinemas',
                             arguments: routesData);
                       },
-                      child: const Text("ИЗМЕНИТЬ СЕАНСЫ"),
+                      child: const Text("УДАЛИТЬ"),
                     ),
                   ],
                 )

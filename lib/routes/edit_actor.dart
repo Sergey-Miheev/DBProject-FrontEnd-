@@ -15,7 +15,7 @@ class EditActor extends StatelessWidget {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit actor data"),
+          title: const Text("Редактировать данные\nактёра"),
         ),
         body: Form(
             key: _formKey,
@@ -23,17 +23,22 @@ class EditActor extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               children: [
-                // добавить к каждому сравнение с исходным значением в поле, чтобы не вызывать апи в случае если данные не изменились
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   onChanged: (String value) => {actor.name = value},
-                  decoration: const InputDecoration(labelText: "Actor name"),
+                  decoration: const InputDecoration(labelText: "Имя"),
                   initialValue: actor.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter film name';
+                      return 'Введите имя актёра';
                     }
                     return null;
                   },
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 OverflowBar(
                   alignment: MainAxisAlignment.end,
@@ -43,14 +48,14 @@ class EditActor extends StatelessWidget {
                         deleteActor(actor.idActor);
                         Navigator.pushReplacementNamed(context, '/admin_list_actors');
                       },
-                      child: const Text("DELETE"),
+                      child: const Text("УДАЛИТЬ"),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         editActor(actor);
                         Navigator.pushReplacementNamed(context, '/admin_list_actors');
                       },
-                      child: const Text("SAVE"),
+                      child: const Text("СОХРАНИТЬ"),
                     ),
                   ],
                 )

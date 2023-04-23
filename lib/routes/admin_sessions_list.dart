@@ -43,7 +43,7 @@ class SessionCard extends StatelessWidget {
         children: <Widget>[
           Text("Зал: ${sessionInfo.hallNumber}",
               style: const TextStyle(fontSize: 16, color: Colors.orange)),
-          Text("Тип зала: ${sessionInfo.hallType}",
+          Text("Тип зала: $hallType",
               style: const TextStyle(fontSize: 16, color: Colors.orange)),
           Text("Дата: ${sessionInfo.dateTime.day.toString().padLeft(2, '0')}"
               ".${sessionInfo.dateTime.month.toString().padLeft(2, '0')}",
@@ -94,7 +94,7 @@ class _AdminSessionListState extends State<AdminSessionList> {
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
-              title: Text("-Сеансы кинотеатра\n${routesData.cinema.name}-"),
+              title: Text("Сеансы кинотеатра\n${routesData.cinema.name}"),
               centerTitle: true,
             ),
             body: ListView.separated(

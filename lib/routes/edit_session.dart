@@ -85,8 +85,6 @@ class _EditSessionState extends State<EditSession> {
 
   @override
   void initState() {
-    //_cnt1 = SingleValueDropDownController(data: const DropDownValueModel(name: "name4", value: "f"));
-    //_cnt2 = SingleValueDropDownController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       wrapFilms();
       wrapHalls();
